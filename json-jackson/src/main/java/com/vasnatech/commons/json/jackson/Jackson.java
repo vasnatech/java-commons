@@ -24,4 +24,9 @@ public class Jackson {
     static <T> JavaType toJavaType(Class<T> parametrized, Class<?>[] parameterClasses) {
         return OBJECT_MAPPER.getTypeFactory().constructParametricType(parametrized, parameterClasses);
     }
+
+
+    public static Json json() {
+        return new Json(new JacksonEncoder(), new JacksonDecoder());
+    }
 }

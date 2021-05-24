@@ -12,12 +12,14 @@
     <modules>
         <module>collection</module>
         <module>concurrency</module>
+        <module>event</module>
         <module>function</module>
         <module>http</module>
         <module>http-jdk</module>
         <module>json</module>
         <module>json-jackson</module>
         <module>primitive</module>
+        <module>queue</module>
         <module>random</module>
         <module>resource</module>
         <module>serialize</module>

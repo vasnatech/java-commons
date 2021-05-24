@@ -10,33 +10,13 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>commons-text</artifactId>
+    <artifactId>commons-queue</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <org.eclipse.collections.version>10.4.0</org.eclipse.collections.version>
-        <org.apache.commons.text>1.9</org.apache.commons.text>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>com.vasnatech</groupId>
-            <artifactId>commons-collection</artifactId>
-            <version>${project.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.collections</groupId>
-            <artifactId>eclipse-collections</artifactId>
-            <version>${org.eclipse.collections.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${org.apache.commons.text}</version>
-            <scope>test</scope>
-        </dependency>
-
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-api</artifactId>
@@ -55,4 +35,5 @@
         <plugins>
         </plugins>
     </build>
+
 </project>

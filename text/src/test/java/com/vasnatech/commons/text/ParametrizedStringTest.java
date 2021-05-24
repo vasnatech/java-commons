@@ -1,7 +1,6 @@
 package com.vasnatech.commons.text;
 
 import com.vasnatech.commons.collection.Maps;
-import lombok.SneakyThrows;
 import org.apache.commons.text.StringSubstitutor;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;
@@ -100,9 +99,8 @@ class ParametrizedStringTest {
         softly.assertAll();
     }
 
-    @SneakyThrows
         //@Test
-    void compare() {
+    void compare() throws Exception {
         int iterationCount = 10;
 
 

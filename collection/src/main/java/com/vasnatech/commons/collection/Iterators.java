@@ -56,11 +56,13 @@ public final class Iterators {
     }
 
     public static <T> T last(Iterator<T> iterator) {
+        if (iterator instanceof ListIterator)
+            return last((ListIterator<T>)iterator);
         T last = null;
         while(iterator.hasNext())
             last = iterator.next();
         if (last == null)
-            throw  new NoSuchElementException();
+            throw new NoSuchElementException();
         return last;
     }
 

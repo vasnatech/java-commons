@@ -102,6 +102,21 @@ public interface Pair<F, S> extends Map.Entry<F, S> {
         return (first, second) -> consumer.accept(Pair.of(first, second));
     }
 
+    static <F1, F2, S1, S2> Function<Pair<F1, S1>, Pair<F2, S2>> toPairFunction(
+            Function<F1, F2> firstFunction,
+            Function<S1, S2> secondFunction
+    ) {
+        return pair -> Pair.of(firstFunction.apply(pair.first()), secondFunction.apply(pair.second()));
+    }
+
+    static <F1, F2, S> Function<Pair<F1, S>, Pair<F2, S>> toPairFunctionFirst(Function<F1, F2> function) {
+        return toPairFunction(function, Function.identity());
+    }
+
+    static <F, S1, S2> Function<Pair<F, S1>, Pair<F, S2>> toPairFunctionSecond(Function<S1, S2> function) {
+        return toPairFunction(Function.identity(), function);
+    }
+
     static <F, S> List<Pair<F, S>> zip(List<F> firstList, List<S> secondList) {
         ArrayList<Pair<F, S>> zippedList = new ArrayList<>(Math.min(firstList.size(), secondList.size()));
         Iterator<F> firstIterator = firstList.iterator();

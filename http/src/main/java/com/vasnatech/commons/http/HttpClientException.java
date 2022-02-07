@@ -27,4 +27,8 @@ public class HttpClientException extends RuntimeException {
         super(message, cause, enableSuppression, writableStackTrace);
         this.httpStatus = httpStatus;
     }
+
+    public int getHttpStatus() {
+        return httpStatus;
+    }
 }

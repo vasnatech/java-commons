@@ -124,7 +124,7 @@ public interface Pair<F, S> extends Map.Entry<F, S> {
         while (firstIterator.hasNext() && secondIterator.hasNext()) {
             zippedList.add(of(firstIterator.next(), secondIterator.next()));
         }
-        return List.copyOf(zippedList);
+        return Collections.unmodifiableList(zippedList);
     }
 
     static <F, S> Pair<List<F>, List<S>> unzip(List<Pair<F, S>> zippedList) {

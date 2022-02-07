@@ -77,12 +77,12 @@ public class BlockingQueueThread<T> {
                 T data = queue.poll(pollDuration.toNanos(), TimeUnit.NANOSECONDS);
                 if (data != null) {
                     dataHandler.accept(data);
-                } else {
-                    if (status == Status.ShuttingDown)
-                        status = Status.ShutDown;
                 }
             } catch (Exception e) {
                 handle(e);
+            } finally {
+                if (status == Status.ShuttingDown)
+                    status = Status.ShutDown;
             }
         }
     }
@@ -90,7 +90,7 @@ public class BlockingQueueThread<T> {
     void handle(Exception e) {
         try {
             exceptionHandler.accept(e);
-        } catch (Exception e1) {
+        } catch (Exception ignored) {
         }
     }
 

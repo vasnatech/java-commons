@@ -37,7 +37,7 @@ public final class Lists {
                 .collect(Collectors.toList());
     }
 
-    public static <T> List<T> add(List<T> target, List<? extends  T> source, int fromInclusive, int toExclusive) {
+    public static <T> List<T> add(List<T> target, List<? extends T> source, int fromInclusive, int toExclusive) {
         if (target == null)
             target = new ArrayList<>(Math.max(0, toExclusive - fromInclusive));
         int index = fromInclusive;
@@ -101,7 +101,7 @@ public final class Lists {
         int index = 0;
         while (iterator.hasNext() && index++ < count)
             list.add(iterator.next());
-        return list;
+        return java.util.Collections.unmodifiableList(list);
     }
 
     public static <T> List<T> repeat(T item, int times) {

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Randoms {
 
-    static Random RANDOM = new Random();
+    static final Random RANDOM = new Random();
 
     public static String hex() {
         return hex(16);
@@ -17,9 +17,9 @@ public class Randoms {
         return toHexString(randomBytes);
     }
 
-    static int HIGH_DIGIT_MASK = 0xF0;
-    static int LOW_DIGIT_MASK = 0x0F;
-    static char[] HEX_DIGITS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+    static final  int HIGH_DIGIT_MASK = 0xF0;
+    static final  int LOW_DIGIT_MASK = 0x0F;
+    static final char[] HEX_DIGITS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
     static String toHexString(byte[] data) {
         final int length = data.length;
         final char[] hexChars = new char[length << 1];

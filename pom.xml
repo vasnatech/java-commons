@@ -18,9 +18,11 @@
         <module>http-jdk</module>
         <module>json</module>
         <module>json-jackson</module>
+        <module>katip</module>
         <module>primitive</module>
         <module>queue</module>
         <module>random</module>
+        <module>reflection</module>
         <module>resource</module>
         <module>serialize</module>
         <module>text</module>
@@ -28,15 +30,14 @@
     </modules>
 
     <properties>
-        <jdk.version>15</jdk.version>
-        <maven.compiler.source>15</maven.compiler.source>
-        <maven.compiler.target>15</maven.compiler.target>
+        <jdk.version>17</jdk.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <com.fasterxml.jackson.version>2.12.2</com.fasterxml.jackson.version>
-        <org.apache.commons.version>1.9</org.apache.commons.version>
-        <org.junit.jupiter.version>5.7.1</org.junit.jupiter.version>
-        <org.assertj.version>3.19.0</org.assertj.version>
-        <org.mockito.version>3.8.0</org.mockito.version>
+        <org.junit.jupiter.version>5.8.2</org.junit.jupiter.version>
+        <org.assertj.version>3.23.1</org.assertj.version>
+        <org.mockito.version>4.6.1</org.mockito.version>
     </properties>
 
     <dependencies>

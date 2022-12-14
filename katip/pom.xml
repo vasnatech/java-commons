@@ -10,35 +10,34 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>commons-http</artifactId>
+    <artifactId>commons-katip</artifactId>
     <packaging>jar</packaging>
 
     <properties>
-        <org.apache.commons-text.version>1.9</org.apache.commons-text.version>
+        <org.apache.commons-lang.version>3.12.0</org.apache.commons-lang.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>com.vasnatech</groupId>
-            <artifactId>commons-type</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vasnatech</groupId>
-            <artifactId>commons-json</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.vasnatech</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${org.apache.commons-text.version}</version>
+            <artifactId>commons-lang3</artifactId>
+            <version>${org.apache.commons-lang.version}</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.vasnatech</groupId>
+            <artifactId>commons-reflection</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vasnatech</groupId>
+            <artifactId>commons-resource</artifactId>
+            <version>${version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vasnatech</groupId>
+            <artifactId>commons-text</artifactId>
+            <version>${version}</version>
+        </dependency>
 
         <dependency>
             <groupId>org.junit.jupiter</groupId>
@@ -59,5 +58,6 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
 
 </project>

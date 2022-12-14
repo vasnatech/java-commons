@@ -1,10 +1,12 @@
 package com.vasnatech.commons.event;
 
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
+import javax.annotation.*;
 
 public final class EventListeners {
 
@@ -20,18 +22,32 @@ public final class EventListeners {
         this.listenersGroupedByEventType = new ConcurrentHashMap<>();
     }
 
-    public <E, L extends Listener<E>> void add(Class<E> eventType, L listener) {
+    public synchronized <E, L extends Listener<E>> void add(Class<E> eventType, L listener) {
         listenersGroupedByEventType.computeIfAbsent(
                 eventType,
                 t -> new ConcurrentLinkedQueue<>()
         ).add(listener);
     }
 
-    public <E, L extends Listener<E>> void remove(Class<E> eventType, L listener) {
+    public synchronized <E, L extends Listener<E>> void remove(Class<E> eventType, L listener) {
         listenersGroupedByEventType.computeIfAbsent(
                 eventType,
                 t -> new ConcurrentLinkedQueue<>()
         ).remove(listener);
+    }
+
+    synchronized <E, L extends Listener<E>> ConcurrentLinkedQueue<L> get(@NotNull Class<E> eventType) {
+        Objects.requireNonNull(eventType);
+        Class<?> clazz = eventType;
+        while (clazz != null) {
+            if (listenersGroupedByEventType.containsKey(clazz)) {
+                return listenersGroupedByEventType.get(clazz);
+            }
+            clazz = clazz.getSuperclass();
+        }
+        ConcurrentLinkedQueue<L> queue = new ConcurrentLinkedQueue<>();
+        listenersGroupedByEventType.put(eventType, queue);
+        return queue;
     }
 
     @SuppressWarnings("unchecked")

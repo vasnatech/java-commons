@@ -3,6 +3,7 @@ package com.vasnatech.commons.resource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
@@ -47,6 +48,14 @@ public interface Resources {
         return asStringBuilder(in, encoding, bufferSize).toString();
     }
 
+    static String asString(Reader reader) throws IOException {
+        return asString(reader, 4096);
+    }
+
+    static String asString(Reader reader, int bufferSize) throws IOException {
+        return asStringBuilder(reader, bufferSize).toString();
+    }
+
     static StringBuilder asStringBuilder(Object relativeTo, String name) throws IOException {
         return asStringBuilder(relativeTo.getClass(), name);
     }
@@ -79,6 +88,20 @@ public interface Resources {
         return builder;
     }
 
+    static StringBuilder asStringBuilder(Reader reader) throws IOException {
+        return asStringBuilder(reader, 4096);
+    }
+
+    static StringBuilder asStringBuilder(Reader reader, int bufferSize) throws IOException {
+        StringBuilder builder = new StringBuilder(bufferSize);
+        char[] buffer = new char[bufferSize];
+        int n;
+        while (-1 != (n = reader.read(buffer))) {
+            builder.append(buffer, 0, n);
+        }
+        return builder;
+    }
+
     static Map<String, String> asMapFromProperties(Object relativeTo, String name) throws IOException {
         return asMapFromProperties(relativeTo.getClass(), name);
     }
@@ -93,6 +116,10 @@ public interface Resources {
 
     static Map<String, String> asMapFromProperties(InputStream in) throws IOException {
         return asProperties(in).entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().toString()));
+    }
+
+    static Map<String, String> asMapFromProperties(Reader reader) throws IOException {
+        return asProperties(reader).entrySet().stream().collect(Collectors.toMap(e -> e.getKey().toString(), e -> e.getValue().toString()));
     }
 
     static Properties asProperties(Object relativeTo, String name) throws IOException {
@@ -111,6 +138,14 @@ public interface Resources {
         try (in) {
             Properties properties = new Properties();
             properties.load(in);
+            return properties;
+        }
+    }
+
+    static Properties asProperties(Reader reader) throws IOException {
+        try (reader) {
+            Properties properties = new Properties();
+            properties.load(reader);
             return properties;
         }
     }

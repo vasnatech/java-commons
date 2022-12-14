@@ -7,11 +7,17 @@ public class Token<T> {
     final int length;
     final String match;
     final T value;
+    final boolean iterable;
 
     public Token(String match, T value) {
+        this(match, value, true);
+    }
+
+    public Token(String match, T value, boolean iterable) {
         this.length = match.length();
         this.match = match;
         this.value = value;
+        this.iterable = iterable;
     }
 
     public String getMatch() {
@@ -20,6 +26,10 @@ public class Token<T> {
 
     public T getValue() {
         return value;
+    }
+
+    public boolean isIterable() {
+        return iterable;
     }
 
     @Override

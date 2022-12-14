@@ -1,8 +1,11 @@
 package com.vasnatech.commons.text.token;
 
+import com.vasnatech.commons.text.ReaderCharSequence;
 import org.eclipse.collections.api.map.primitive.MutableCharObjectMap;
 import org.eclipse.collections.impl.map.mutable.primitive.CharObjectHashMap;
 
+import java.io.InputStream;
+import java.io.Reader;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -19,7 +22,7 @@ public class Tokenizer<T> {
     }
 
     public Tokenizer(Collection<Token<T>> tokens) {
-        this.tokenTree = new Tree<>();
+        this(new Tree<>());
         tokens.forEach(tokenTree::add);
     }
 
@@ -27,23 +30,34 @@ public class Tokenizer<T> {
         this.tokenTree = tokenTree;
     }
 
-    public Iterator<Token<T>> tokenize(String template) {
+    public Iterator<Token<T>> tokenize(CharSequence template) {
         return new TokenIterator<>(tokenTree, template);
+    }
+
+    public Iterator<Token<T>> tokenize(Reader reader) {
+        return tokenize(new ReaderCharSequence(reader, 4096));
+    }
+
+    public Iterator<Token<T>> tokenize(InputStream in) {
+        return tokenize(new ReaderCharSequence(in, 4096));
     }
 
 
     static class Tree<T> {
         final Node<T> root;
+        int depth;
 
         public Tree() {
             this.root = new Node<>('\0');
+            this.depth = 0;
         }
 
         void add(Token<T> token) {
+            depth = Math.max(depth, token.length);
             root.add(token, 0);
         }
 
-        Token<T> find(String template, int length, int index) {
+        Token<T> find(CharSequence template, int length, int index) {
             return root.find(template, length, index);
         }
     }
@@ -69,7 +83,7 @@ public class Tokenizer<T> {
             child.add(token, index + 1);
         }
 
-        Token<T> find(String template, int length, int index) {
+        Token<T> find(CharSequence template, int length, int index) {
             if (index >= length)
                 return this.token;
             Node<T> charNode = children.get(template.charAt(index));
@@ -81,7 +95,7 @@ public class Tokenizer<T> {
 
     static class TokenIterator<T> implements Iterator<Token<T>> {
         final Tree<T> tokenTree;
-        final String template;
+        final CharSequence template;
         final int templateLength;
 
         int lastReturnedIndex;
@@ -90,7 +104,7 @@ public class Tokenizer<T> {
 
         Token<T> matchedToken;
 
-        public TokenIterator(Tree<T> tokenTree, String template) {
+        public TokenIterator(Tree<T> tokenTree, CharSequence template) {
             this.tokenTree = tokenTree;
             this.template = template;
             this.templateLength = template.length();
@@ -109,9 +123,9 @@ public class Tokenizer<T> {
         @Override
         public Token<T> next() {
             if (lastReturnedIndex < matchStartIndex) {
-                String match = template.substring(lastReturnedIndex, matchStartIndex);
+                CharSequence match = template.subSequence(lastReturnedIndex, matchStartIndex);
                 lastReturnedIndex = matchStartIndex;
-                return new Token<>(match, null);
+                return new Token<>(match.toString(), null);
             }
             if (matchStartIndex < currentIndex) {
                 lastReturnedIndex = matchStartIndex = currentIndex;
@@ -133,9 +147,13 @@ public class Tokenizer<T> {
                     ++currentIndex;
                     continue;
                 }
-                matchedToken = token;
-                currentIndex = matchStartIndex + token.length;
-                break;
+                if (token.isIterable()) {
+                    currentIndex = matchStartIndex + token.length;
+                    matchedToken = token;
+                    break;
+                }
+                currentIndex += token.length;
+                matchStartIndex += token.length;
             }
 
             return next();

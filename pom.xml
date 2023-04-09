@@ -18,7 +18,6 @@
         <module>http-jdk</module>
         <module>json</module>
         <module>json-jackson</module>
-        <module>katip</module>
         <module>primitive</module>
         <module>queue</module>
         <module>random</module>

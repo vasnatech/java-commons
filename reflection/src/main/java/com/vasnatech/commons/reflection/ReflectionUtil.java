@@ -118,7 +118,12 @@ public final class ReflectionUtil {
             return ReflectionUtil.invokeExactMethod(clazz, parent, name, parameterClasses, parameters);
         } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             try {
-                return ReflectionUtil.invokeBestMethod(clazz, parent, name, parameterClasses, parameters);
+                Object result = ReflectionUtil.invokeInterfaceMethod(clazz, parent, name, parameterClasses, parameters);
+                if (result != null) {
+                    return result;
+                } else {
+                    return ReflectionUtil.invokeBestMethod(clazz, parent, name, parameterClasses, parameters);
+                }
             } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e2) {
                 throw e;
             }
@@ -167,6 +172,31 @@ public final class ReflectionUtil {
             if (match) {
                 return method.invoke(object, parameters);
             }
+        }
+        return null;
+    }
+
+    public static Object invokeInterfaceMethod(Object object, String name, Object... parameters) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (object == null || StringUtils.isEmpty(name)) {
+            return null;
+        }
+        Class<?> clazz = object.getClass();
+        Class<?>[] parameterClasses = Stream.of(parameters).map(p -> p == null ? null : p.getClass()).toArray(Class<?>[]::new);
+        return invokeInterfaceMethod(clazz, object, name, parameterClasses, parameters);
+
+    }
+
+    private static Object invokeInterfaceMethod(Class<?> clazz, Object parent, String name, Class<?>[] parameterClasses, Object[] parameters) {
+        Class<?> classIterator = clazz;
+        while (classIterator != null) {
+            for (Class<?> classInterface : classIterator.getInterfaces()) {
+                try {
+                    Method method = classInterface.getMethod(name, parameterClasses);
+                    return method.invoke(parent, parameters);
+                } catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException ignore) {
+                }
+            }
+            classIterator = classIterator.getSuperclass();
         }
         return null;
     }

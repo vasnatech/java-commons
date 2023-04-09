@@ -152,8 +152,11 @@ public class Tokenizer<T> {
                     matchedToken = token;
                     break;
                 }
-                currentIndex += token.length;
-                matchStartIndex += token.length;
+                else {
+                    matchStartIndex += token.length;
+                    currentIndex = matchStartIndex;
+                    lastReturnedIndex = matchStartIndex;
+                }
             }
 
             return next();

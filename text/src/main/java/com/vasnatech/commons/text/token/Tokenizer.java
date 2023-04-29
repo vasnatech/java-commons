@@ -96,7 +96,6 @@ public class Tokenizer<T> {
     static class TokenIterator<T> implements Iterator<Token<T>> {
         final Tree<T> tokenTree;
         final CharSequence template;
-        final int templateLength;
 
         int lastReturnedIndex;
         int matchStartIndex;
@@ -107,7 +106,6 @@ public class Tokenizer<T> {
         public TokenIterator(Tree<T> tokenTree, CharSequence template) {
             this.tokenTree = tokenTree;
             this.template = template;
-            this.templateLength = template.length();
 
             this.lastReturnedIndex = 0;
             this.matchStartIndex = 0;
@@ -117,7 +115,7 @@ public class Tokenizer<T> {
 
         @Override
         public boolean hasNext() {
-            return lastReturnedIndex < templateLength;
+            return lastReturnedIndex < template.length();
         }
 
         @Override
@@ -133,15 +131,15 @@ public class Tokenizer<T> {
                 matchedToken = null;
                 return token;
             }
-            if (matchStartIndex >= templateLength) {
+            if (matchStartIndex >= template.length()) {
                 throw new NoSuchElementException();
             }
 
             // Here currentIndex and matchStartIndex and lastReturnedIndex are same
             // also matchedToken is null
 
-            while (matchStartIndex < templateLength) {
-                Token<T> token = tokenTree.find(template, templateLength, matchStartIndex);
+            while (matchStartIndex < template.length()) {
+                Token<T> token = tokenTree.find(template, template.length(), matchStartIndex);
                 if (token == null) {
                     ++matchStartIndex;
                     ++currentIndex;

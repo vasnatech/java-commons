@@ -24,14 +24,11 @@ public class ReaderCharSequence implements CharSequence {
 
     public ReaderCharSequence(Reader reader, int bufferSize) {
         this.reader = reader;
-        this.leftBuffer = new char[bufferSize];
-        this.centerBuffer = new char[bufferSize];
-        this.rightBuffer = new char[bufferSize];
 
-        init();
-    }
+        leftBuffer = new char[bufferSize];
+        centerBuffer = new char[bufferSize];
+        rightBuffer = new char[bufferSize];
 
-    private void init() {
         offset = 0;
         leftLength = 0;
         centerLength = read(centerBuffer);
@@ -64,7 +61,7 @@ public class ReaderCharSequence implements CharSequence {
 
     @Override
     public int length() {
-        return offset + leftLength + centerLength;
+        return reachedEnd() ? offset + leftLength + centerLength : Integer.MAX_VALUE;
     }
 
     private boolean reachedEnd() {
@@ -73,11 +70,13 @@ public class ReaderCharSequence implements CharSequence {
 
     @Override
     public char charAt(int index) {
-        while (index >= length()) {
+        int len = offset + leftLength + centerLength;
+        while (index >= len) {
             if (reachedEnd()) {
-                throw new IndexOutOfBoundsException("index: " + index + ", offset: " + offset + ", length: " + length());
+                throw new IndexOutOfBoundsException("index: " + index + ", offset: " + offset + ", length: " + len);
             }
             shiftRight();
+            len = offset + leftLength + centerLength;
         }
         int normalizedIndex = index - offset;
         if (normalizedIndex < 0) {
@@ -91,7 +90,7 @@ public class ReaderCharSequence implements CharSequence {
 
     @Override
     public CharSequence subSequence(int start, int end) {
-        int extendedLength = reachedEnd() ? length() : length() + rightLength;
+        int extendedLength = offset + leftLength + centerLength + (reachedEnd() ? 0 : rightLength);
 
         if (start < offset || start >= extendedLength) {
             throw new IndexOutOfBoundsException("index: " + start + ", offset: " + offset + ", length: " + extendedLength);
@@ -109,7 +108,7 @@ public class ReaderCharSequence implements CharSequence {
             if (normalizedEnd < leftLength) {
                 return new String(leftBuffer, normalizedStart, normalizedEnd - normalizedStart);
             } else {
-                if (normalizedEnd < leftLength + rightLength) {
+                if (normalizedEnd < leftLength + centerLength) {
                     return  new String(leftBuffer, normalizedStart, leftLength - normalizedStart) +
                             new String(centerBuffer, 0, normalizedEnd - leftLength);
 

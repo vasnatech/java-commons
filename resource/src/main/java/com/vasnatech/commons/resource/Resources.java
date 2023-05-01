@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -24,6 +26,10 @@ public interface Resources {
         return Thread.currentThread().getContextClassLoader().getResourceAsStream(name);
     }
 
+    static InputStream asInputStream(Path path) throws IOException {
+        return Files.newInputStream(path);
+    }
+
     static String asString(Object relativeTo, String name) throws IOException {
         return asString(relativeTo.getClass(), name);
     }
@@ -34,6 +40,14 @@ public interface Resources {
 
     static String asString(String name) throws IOException {
         return asString(asInputStream(name));
+    }
+
+    static String asString(Path path) throws IOException {
+        return Files.readString(path);
+    }
+
+    static String asString(Path path, Charset charset) throws IOException {
+        return Files.readString(path, charset);
     }
 
     static String asString(InputStream in) throws IOException {

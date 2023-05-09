@@ -9,8 +9,7 @@ public class ObjectDeserializer implements Deserializer {
     @Override
     @SuppressWarnings("unchecked")
     public <T, R extends T> R deserialize(InputStream in, Class<T> rawClass, Class<?>... parameterClasses) throws IOException {
-        ObjectInputStream objectIn = new ObjectInputStream(in);
-        try {
+        try (ObjectInputStream objectIn = new ObjectInputStream(in)) {
             return (R) rawClass.cast(objectIn.readObject());
         } catch (ClassNotFoundException e) {
             throw new IOException(e.getMessage(), e);

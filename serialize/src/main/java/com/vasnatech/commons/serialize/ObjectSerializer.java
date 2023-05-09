@@ -8,8 +8,8 @@ public class ObjectSerializer implements Serializer {
 
     @Override
     public <T> void serialize(OutputStream out, T value) throws IOException {
-        ObjectOutputStream objectOut = new ObjectOutputStream(out);
-        objectOut.writeObject(value);
-        objectOut.close();
+        try (ObjectOutputStream objectOut = new ObjectOutputStream(out)) {
+            objectOut.writeObject(value);
+        }
     }
 }

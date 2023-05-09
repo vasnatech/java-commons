@@ -18,15 +18,15 @@ public final class MediaTypes {
         groupedByMimeType.put(mediaType.mimeType().toLowerCase(Locale.ENGLISH), mediaType);
     }
 
-    public MediaType getByName(String name) {
+    public static MediaType getByName(String name) {
         return groupedByName.get(name);
     }
 
-    public MediaType getByFileExtension(String fileExtension) {
+    public static MediaType getByFileExtension(String fileExtension) {
         return groupedByFileExtension.get(fileExtension.toLowerCase(Locale.ENGLISH));
     }
 
-    public MediaType getByMimeType(String mimeType) {
+    public static MediaType getByMimeType(String mimeType) {
         return groupedByMimeType.get(mimeType.toLowerCase(Locale.ENGLISH));
     }
 }

@@ -8,25 +8,25 @@ public final class MediaTypes {
 
     private MediaTypes() {}
 
-    static Map<String, MediaType> groupedByName = new HashMap<>();
-    static Map<String, MediaType> groupedByFileExtension = new HashMap<>();
-    static Map<String, MediaType> groupedByMimeType = new HashMap<>();
+    static Map<String, MediaType> GROUPED_BY_NAME = new HashMap<>();
+    static Map<String, MediaType> GROUPED_BY_FILE_EXTENSION = new HashMap<>();
+    static Map<String, MediaType> GROUPED_BY_MIME_TYPE = new HashMap<>();
 
     public static void add(MediaType mediaType) {
-        groupedByName.put(mediaType.name(), mediaType);
-        mediaType.fileExtensions().forEach(fileExtension -> groupedByFileExtension.put(fileExtension.toLowerCase(Locale.ENGLISH), mediaType));
-        groupedByMimeType.put(mediaType.mimeType().toLowerCase(Locale.ENGLISH), mediaType);
+        GROUPED_BY_NAME.put(mediaType.name(), mediaType);
+        mediaType.fileExtensions().forEach(fileExtension -> GROUPED_BY_FILE_EXTENSION.put(fileExtension.toLowerCase(Locale.ENGLISH), mediaType));
+        GROUPED_BY_MIME_TYPE.put(mediaType.mimeType().toLowerCase(Locale.ENGLISH), mediaType);
     }
 
     public static MediaType getByName(String name) {
-        return groupedByName.get(name);
+        return GROUPED_BY_NAME.get(name);
     }
 
     public static MediaType getByFileExtension(String fileExtension) {
-        return groupedByFileExtension.get(fileExtension.toLowerCase(Locale.ENGLISH));
+        return GROUPED_BY_FILE_EXTENSION.get(fileExtension.toLowerCase(Locale.ENGLISH));
     }
 
     public static MediaType getByMimeType(String mimeType) {
-        return groupedByMimeType.get(mimeType.toLowerCase(Locale.ENGLISH));
+        return GROUPED_BY_MIME_TYPE.get(mimeType.toLowerCase(Locale.ENGLISH));
     }
 }

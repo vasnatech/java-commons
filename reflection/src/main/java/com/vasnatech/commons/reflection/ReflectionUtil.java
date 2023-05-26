@@ -2,10 +2,16 @@ package com.vasnatech.commons.reflection;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.file.Path;
+import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public final class ReflectionUtil {
@@ -199,5 +205,42 @@ public final class ReflectionUtil {
             classIterator = classIterator.getSuperclass();
         }
         return null;
+    }
+
+    public static Object invokeStaticMethod(Class<?> clazz, String name) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        return invokeStaticMethod(clazz, name, new Class[0], new Object[0]);
+    }
+
+    public static Object invokeStaticMethod(Class<?> clazz, String name, Class<?>[] parameterClasses, Object[] parameters) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+        if (clazz == null || StringUtils.isEmpty(name)) {
+            return null;
+        }
+        Method method = clazz.getMethod(name, parameterClasses);
+        return method.invoke(null, parameters);
+    }
+
+    public static ClassLoader createClassLoaderFromUrls(URL... urls) {
+        return new URLClassLoader(urls, Thread.currentThread().getContextClassLoader());
+    }
+
+    public static ClassLoader createClassLoaderFromUrls(Collection<URL> urls) {
+        return createClassLoaderFromUrls(urls.toArray(URL[]::new));
+    }
+
+    public static ClassLoader createClassLoader(Set<String> classPaths) throws IOException {
+        URL[] urls = new URL[classPaths.size()];
+        int index = 0;
+        for (String classPath : classPaths) {
+            urls[index++] = Path.of(classPath).toUri().toURL();
+        }
+        return createClassLoaderFromUrls(urls);
+    }
+
+    public static ClassLoader createClassLoader(Collection<String> classPaths) throws IOException {
+        return createClassLoader(new HashSet<>(classPaths));
+    }
+
+    public static ClassLoader createClassLoader(String... classPaths) throws IOException {
+        return createClassLoader(Stream.of(classPaths).collect(Collectors.toSet()));
     }
 }

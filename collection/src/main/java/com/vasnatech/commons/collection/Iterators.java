@@ -1,13 +1,16 @@
 package com.vasnatech.commons.collection;
 
-import java.util.Iterator;
-import java.util.ListIterator;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.function.Function;
 
 public final class Iterators {
 
     private Iterators() {}
+
+    @SuppressWarnings("unchecked")
+    public static <T, I extends Iterator<T>> I from(T... elements) {
+        return (I) ArrayIterator.of(elements);
+    }
 
     public static <T, R> Iterator<R> from(Iterator<T> iterator, Function<T, R> mapper) {
         return new Iterator<>() {
@@ -68,5 +71,13 @@ public final class Iterators {
 
     public static <T> T last(ListIterator<T> iterator) {
         return iterator.previous();
+    }
+
+    public static <T> CachedIterator<T> toCachedIterator(Iterator<T> source) {
+        return new CachedIteratorImpl<>(source);
+    }
+
+    public static <T> CachedIterator<T> toCachedIterator(Iterator<T> source, int cacheSize) {
+        return new CachedIteratorImpl<>(source, cacheSize);
     }
 }

@@ -107,7 +107,8 @@ public final class ReflectionUtil {
             setterName = name;
         }
         setterName = "set" + setterName;
-        invokeMethod(clazz, object, setterName, new Class<?>[]{valueClass}, new Object[]{value});
+        Object result = invokeMethod(clazz, object, setterName, new Class<?>[]{valueClass}, new Object[]{value});
+
     }
 
     public static Object invokeMethod(Object object, String name, Object... parameters) throws InvocationTargetException, NoSuchMethodException, IllegalAccessException {

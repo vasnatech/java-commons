@@ -1,6 +1,6 @@
 package com.vasnatech.commons.expression.function;
 
-import com.vasnatech.commons.expression.Name;
+import com.vasnatech.commons.type.Name;
 import org.apache.commons.lang3.LocaleUtils;
 
 import java.util.Locale;

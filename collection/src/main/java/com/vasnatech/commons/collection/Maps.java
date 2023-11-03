@@ -99,4 +99,16 @@ public final class Maps {
                         )
                 );
     }
+
+    public static <K1, K2, V1, V2> Map<K2, V2> map(Map<? extends K1, ? extends V1> map, Function<K1, K2> keyMapper, Function<V1, V2> valueMapper) {
+        return map.entrySet().stream().collect(Collectors.toMap(e -> keyMapper.apply(e.getKey()), e -> valueMapper.apply(e.getValue())));
+    }
+
+    public static <K1, K2, V> Map<K2, V> mapKeys(Map<? extends K1, ? extends V> map, Function<K1, K2> keyMapper) {
+        return map(map, keyMapper, Function.identity());
+    }
+
+    public static <K, V1, V2> Map<K, V2> mapValues(Map<? extends K, ? extends V1> map, Function<V1, V2> valueMapper) {
+        return map(map, Function.identity(), valueMapper);
+    }
 }

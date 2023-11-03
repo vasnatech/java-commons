@@ -1,4 +1,4 @@
-package com.vasnatech.commons.expression;
+package com.vasnatech.commons.type;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;

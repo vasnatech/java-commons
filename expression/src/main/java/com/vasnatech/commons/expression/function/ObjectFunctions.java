@@ -27,7 +27,7 @@ public interface ObjectFunctions {
         }
         @Override
         public Class<?> parameterType(int index) {
-            return String.class;
+            return Object.class;
         }
     }
 

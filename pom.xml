@@ -26,6 +26,7 @@
         <module>random</module>
         <module>reflection</module>
         <module>resource</module>
+        <module>schema</module>
         <module>serialize</module>
         <module>text</module>
         <module>type</module>

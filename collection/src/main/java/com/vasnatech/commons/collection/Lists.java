@@ -1,7 +1,6 @@
 package com.vasnatech.commons.collection;
 
 import com.vasnatech.commons.type.Pair;
-import com.vasnatech.commons.type.Triple;
 import com.vasnatech.commons.function.TriFunction;
 
 import java.util.ArrayList;

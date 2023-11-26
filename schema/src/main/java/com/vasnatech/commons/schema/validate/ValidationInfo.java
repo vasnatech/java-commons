@@ -19,12 +19,12 @@ public record ValidationInfo(String path, String message) {
         }
 
         public Builder addPath(String path) {
-            this.path.push(path);
+            this.path.offer(path);
             return this;
         }
 
         public Builder removePath() {
-            this.path.pop();
+            this.path.pollLast();
             return this;
         }
 

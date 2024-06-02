@@ -2,7 +2,7 @@ package com.vasnatech.commons.schema.load;
 
 import java.util.Map;
 
-public abstract class SchemaLoaderFactory {
+public interface SchemaLoaderFactory {
 
-    public abstract SchemaLoader create(Map<String, ?> config);
+    SchemaLoader create(Map<String, ?> config);
 }

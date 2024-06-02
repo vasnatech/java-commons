@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonFactory;
 
 import java.util.Map;
 
-public class JacksonJsonSchemaLoaderFactory extends SchemaLoaderFactory {
+public class JacksonJsonSchemaLoaderFactory implements SchemaLoaderFactory {
 
     @Override
     public SchemaLoader create(Map<String, ?> config) {

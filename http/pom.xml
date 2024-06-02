@@ -14,7 +14,6 @@
     <packaging>jar</packaging>
 
     <properties>
-        <org.apache.commons-text.version>1.9</org.apache.commons-text.version>
     </properties>
 
     <dependencies>
@@ -32,11 +31,6 @@
             <groupId>com.vasnatech</groupId>
             <artifactId>commons-text</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-text</artifactId>
-            <version>${org.apache.commons-text.version}</version>
         </dependency>
 
 

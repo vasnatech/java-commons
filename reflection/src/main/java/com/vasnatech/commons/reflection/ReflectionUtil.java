@@ -183,7 +183,7 @@ public final class ReflectionUtil {
         return null;
     }
 
-    public static Object invokeInterfaceMethod(Object object, String name, Object... parameters) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static Object invokeInterfaceMethod(Object object, String name, Object... parameters) {
         if (object == null || StringUtils.isEmpty(name)) {
             return null;
         }

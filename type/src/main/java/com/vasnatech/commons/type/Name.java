@@ -143,7 +143,7 @@ public class Name implements CharSequence {
     }
 
     public String toCamelCase(Locale locale) {
-        if (words.size() < 1)
+        if (words.isEmpty())
             return String.join("", words);
         return words.get(0) + words.subList(1, words.size()).stream()
                 .map(it -> capitalizeFirstLetter(it, locale))

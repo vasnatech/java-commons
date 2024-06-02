@@ -1,22 +1,6 @@
 package com.vasnatech.commons.schema.schema;
 
-public class Append {
-
-    final String name;
-    final Anchor anchor;
-
-    public Append(String name, Anchor anchor) {
-        this.name = name;
-        this.anchor = anchor;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public Anchor getAnchor() {
-        return anchor;
-    }
+public record Append(String name, Anchor anchor) {
 
     public static Builder builder() {
         return new Builder();

@@ -4,40 +4,40 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface CheckedConsumer<T> {
+public interface CheckedConsumer<FIRST> {
 
-    void accept(T t) throws Exception;
+    void accept(FIRST first) throws Exception;
 
-    default Consumer<T> unchecked() {
+    default Consumer<FIRST> unchecked() {
         return unchecked(this, ExceptionHandler.asConsumer());
     }
 
-    default Consumer<T> unchecked(Consumer<Exception> exceptionHandler) {
+    default Consumer<FIRST> unchecked(Consumer<Exception> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default CheckedConsumer<T> andThen(CheckedConsumer<? super T> after) {
+    default CheckedConsumer<FIRST> andThen(CheckedConsumer<? super FIRST> after) {
         Objects.requireNonNull(after);
-        return (T t) -> { accept(t); after.accept(t); };
+        return (FIRST first) -> { accept(first); after.accept(first); };
     }
 
-    default CheckedConsumer<T> andThen(Consumer<? super T> after) {
+    default CheckedConsumer<FIRST> andThen(Consumer<? super FIRST> after) {
         Objects.requireNonNull(after);
-        return (T t) -> { accept(t); after.accept(t); };
+        return (FIRST first) -> { accept(first); after.accept(first); };
     }
 
-    static <T> CheckedConsumer<T> checked(Consumer<T> unchecked) {
+    static <FIRST> CheckedConsumer<FIRST> checked(Consumer<FIRST> unchecked) {
         return unchecked::accept;
     }
 
-    static <T> Consumer<T> unchecked(CheckedConsumer<T> checked) {
+    static <FIRST> Consumer<FIRST> unchecked(CheckedConsumer<FIRST> checked) {
         return unchecked(checked, ExceptionHandler.asConsumer());
     }
 
-    static <T> Consumer<T> unchecked(CheckedConsumer<T> checked, Consumer<Exception> exceptionHandler) {
-        return t -> {
+    static <FIRST> Consumer<FIRST> unchecked(CheckedConsumer<FIRST> checked, Consumer<Exception> exceptionHandler) {
+        return first -> {
             try {
-                checked.accept(t);
+                checked.accept(first);
             } catch (Exception e) {
                 exceptionHandler.accept(e);
             }

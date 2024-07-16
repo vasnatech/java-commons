@@ -5,54 +5,54 @@ import java.util.function.BiPredicate;
 import java.util.function.Predicate;
 
 @FunctionalInterface
-public interface CheckedBiPredicate<T, U> {
+public interface CheckedBiPredicate<FIRST, SECOND> {
 
-    boolean test(T t, U u) throws Exception;
+    boolean test(FIRST first, SECOND second) throws Exception;
 
-    default BiPredicate<T, U> unchecked() {
+    default BiPredicate<FIRST, SECOND> unchecked() {
         return unchecked(this, ExceptionHandler.asPredicate());
     }
 
-    default BiPredicate<T, U> unchecked(Predicate<Exception> exceptionHandler) {
+    default BiPredicate<FIRST, SECOND> unchecked(Predicate<Exception> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default CheckedBiPredicate<T, U> and(CheckedBiPredicate<? super T, ? super U> checked) {
+    default CheckedBiPredicate<FIRST, SECOND> and(CheckedBiPredicate<? super FIRST, ? super SECOND> checked) {
         Objects.requireNonNull(checked);
-        return (t, u) -> test(t, u) && checked.test(t, u);
+        return (first, second) -> test(first, second) && checked.test(first, second);
     }
 
-    default CheckedBiPredicate<T, U> and(BiPredicate<? super T, ? super U> unchecked) {
+    default CheckedBiPredicate<FIRST, SECOND> and(BiPredicate<? super FIRST, ? super SECOND> unchecked) {
         Objects.requireNonNull(unchecked);
-        return (t, u) -> test(t, u) && unchecked.test(t, u);
+        return (first, second) -> test(first, second) && unchecked.test(first, second);
     }
 
-    default CheckedBiPredicate<T, U> negate() {
-        return (t, u) -> !test(t, u);
+    default CheckedBiPredicate<FIRST, SECOND> negate() {
+        return (first, second) -> !test(first, second);
     }
 
-    default CheckedBiPredicate<T, U> or(CheckedBiPredicate<? super T, ? super U> checked) {
+    default CheckedBiPredicate<FIRST, SECOND> or(CheckedBiPredicate<? super FIRST, ? super SECOND> checked) {
         Objects.requireNonNull(checked);
-        return (t, u) -> test(t, u) || checked.test(t, u);
+        return (first, second) -> test(first, second) || checked.test(first, second);
     }
 
-    default CheckedBiPredicate<T, U> or(BiPredicate<? super T, ? super U> unchecked) {
+    default CheckedBiPredicate<FIRST, SECOND> or(BiPredicate<? super FIRST, ? super SECOND> unchecked) {
         Objects.requireNonNull(unchecked);
-        return (t, u) -> test(t, u) || unchecked.test(t, u);
+        return (first, second) -> test(first, second) || unchecked.test(first, second);
     }
 
-    static <T, U> CheckedBiPredicate<T, U> checked(BiPredicate<T, U> unchecked) {
+    static <FIRST, SECOND> CheckedBiPredicate<FIRST, SECOND> checked(BiPredicate<FIRST, SECOND> unchecked) {
         return unchecked::test;
     }
 
-    static <T, U> BiPredicate<T, U> unchecked(CheckedBiPredicate<T, U> checked) {
+    static <FIRST, SECOND> BiPredicate<FIRST, SECOND> unchecked(CheckedBiPredicate<FIRST, SECOND> checked) {
         return unchecked(checked, ExceptionHandler.asPredicate());
     }
 
-    static <T, U> BiPredicate<T, U> unchecked(CheckedBiPredicate<T, U> checked, Predicate<Exception> exceptionHandler) {
-        return (t, u) -> {
+    static <FIRST, SECOND> BiPredicate<FIRST, SECOND> unchecked(CheckedBiPredicate<FIRST, SECOND> checked, Predicate<Exception> exceptionHandler) {
+        return (first, second) -> {
             try {
-                return checked.test(t, u);
+                return checked.test(first, second);
             } catch (Exception e) {
                 return exceptionHandler.test(e);
             }

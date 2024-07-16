@@ -1,14 +1,14 @@
 package com.vasnatech.commons.function;
 
 @FunctionalInterface
-public interface TriConsumer<T, U, V> {
+public interface TriConsumer<FIRST, SECOND, THIRD> {
 
-    void accept(T t, U u, V v);
+    void accept(FIRST first, SECOND second, THIRD third);
 
-    default TriConsumer<T, U, V> andThen(TriConsumer<? super T, ? super U, ? super V> after) {
-        return (t, u, v) -> {
-            accept(t, u, v);
-            after.accept(t, u, v);
+    default TriConsumer<FIRST, SECOND, THIRD> andThen(TriConsumer<? super FIRST, ? super SECOND, ? super THIRD> after) {
+        return (first, second, third) -> {
+            accept(first, second, third);
+            after.accept(first, second, third);
         };
     }
 }

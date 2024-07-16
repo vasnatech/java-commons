@@ -5,40 +5,40 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface CheckedBiFunction<T, U, R> {
+public interface CheckedBiFunction<FIRST, SECOND, R> {
 
-    R apply(T t, U u) throws Exception;
+    R apply(FIRST first, SECOND second) throws Exception;
 
-    default BiFunction<T, U, R> unchecked() {
+    default BiFunction<FIRST, SECOND, R> unchecked() {
         return unchecked(this, ExceptionHandler.asFunction());
     }
 
-    default BiFunction<T, U, R> unchecked(Function<Exception, R> exceptionHandler) {
+    default BiFunction<FIRST, SECOND, R> unchecked(Function<Exception, R> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default <V> CheckedBiFunction<T, U, V> andThen(CheckedFunction<? super R, ? extends V> after) {
+    default <R$> CheckedBiFunction<FIRST, SECOND, R$> andThen(CheckedFunction<? super R, ? extends R$> after) {
         Objects.requireNonNull(after);
-        return (t, u) -> after.apply(apply(t, u));
+        return (first, second) -> after.apply(apply(first, second));
     }
 
-    default <V> CheckedBiFunction<T, U, V> andThen(Function<? super R, ? extends V> after) {
+    default <R$> CheckedBiFunction<FIRST, SECOND, R$> andThen(Function<? super R, ? extends R$> after) {
         Objects.requireNonNull(after);
-        return (t, u) -> after.apply(apply(t, u));
+        return (first, second) -> after.apply(apply(first, second));
     }
 
-    static <T, U, R> CheckedBiFunction<T, U, R> checked(BiFunction<T, U, R> function) {
+    static <FIRST, SECOND, R> CheckedBiFunction<FIRST, SECOND, R> checked(BiFunction<FIRST, SECOND, R> function) {
         return function::apply;
     }
 
-    static <T, U, R> BiFunction<T, U, R> unchecked(CheckedBiFunction<T, U, R> checked) {
+    static <FIRST, SECOND, R> BiFunction<FIRST, SECOND, R> unchecked(CheckedBiFunction<FIRST, SECOND, R> checked) {
         return unchecked(checked, ExceptionHandler.asFunction());
     }
 
-    static <T, U, R> BiFunction<T, U, R> unchecked(CheckedBiFunction<T, U, R> checked, Function<Exception, R> exceptionHandler) {
-        return (t, u) -> {
+    static <FIRST, SECOND, R> BiFunction<FIRST, SECOND, R> unchecked(CheckedBiFunction<FIRST, SECOND, R> checked, Function<Exception, R> exceptionHandler) {
+        return (first, second) -> {
             try {
-                return checked.apply(t, u);
+                return checked.apply(first, second);
             } catch (Exception e) {
                 return exceptionHandler.apply(e);
             }

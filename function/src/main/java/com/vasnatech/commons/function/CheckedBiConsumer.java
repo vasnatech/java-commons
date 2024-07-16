@@ -5,40 +5,40 @@ import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface CheckedBiConsumer<T, U> {
+public interface CheckedBiConsumer<FIRST, SECOND> {
 
-    void accept(T t, U u) throws Exception;
+    void accept(FIRST first, SECOND second) throws Exception;
 
-    default BiConsumer<T, U> unchecked() {
+    default BiConsumer<FIRST, SECOND> unchecked() {
         return unchecked(this, ExceptionHandler.asConsumer());
     }
 
-    default BiConsumer<T, U> unchecked(Consumer<Exception> exceptionHandler) {
+    default BiConsumer<FIRST, SECOND> unchecked(Consumer<Exception> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default CheckedBiConsumer<T, U> andThen(CheckedBiConsumer<? super T, ? super U> after) {
+    default CheckedBiConsumer<FIRST, SECOND> andThen(CheckedBiConsumer<? super FIRST, ? super SECOND> after) {
         Objects.requireNonNull(after);
-        return (t, u) -> { accept(t, u); after.accept(t, u); };
+        return (first, second) -> { accept(first, second); after.accept(first, second); };
     }
 
-    default CheckedBiConsumer<T, U> andThen(BiConsumer<? super T, ? super U> after) {
+    default CheckedBiConsumer<FIRST, SECOND> andThen(BiConsumer<? super FIRST, ? super SECOND> after) {
         Objects.requireNonNull(after);
-        return (t, u) -> { accept(t, u); after.accept(t, u); };
+        return (first, second) -> { accept(first, second); after.accept(first, second); };
     }
 
-    static <T, U> CheckedBiConsumer<T, U> checked(BiConsumer<T, U> unchecked) {
+    static <FIRST, SECOND> CheckedBiConsumer<FIRST, SECOND> checked(BiConsumer<FIRST, SECOND> unchecked) {
         return unchecked::accept;
     }
 
-    static <T, U> BiConsumer<T, U> unchecked(CheckedBiConsumer<T, U> checked) {
+    static <FIRST, SECOND> BiConsumer<FIRST, SECOND> unchecked(CheckedBiConsumer<FIRST, SECOND> checked) {
         return unchecked(checked, ExceptionHandler.asConsumer());
     }
 
-    static <T, U> BiConsumer<T, U> unchecked(CheckedBiConsumer<T, U> checked, Consumer<Exception> exceptionHandler) {
-        return (t, u) -> {
+    static <FIRST, SECOND> BiConsumer<FIRST, SECOND> unchecked(CheckedBiConsumer<FIRST, SECOND> checked, Consumer<Exception> exceptionHandler) {
+        return (first, second) -> {
             try {
-                checked.accept(t, u);
+                checked.accept(first, second);
             } catch (Exception e) {
                 exceptionHandler.accept(e);
             }

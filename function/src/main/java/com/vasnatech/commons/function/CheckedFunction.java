@@ -4,57 +4,57 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface CheckedFunction<T, R> {
+public interface CheckedFunction<FIRST, R> {
 
-    R apply(T t) throws Exception;
+    R apply(FIRST first) throws Exception;
 
-    default Function<T, R> unchecked() {
+    default Function<FIRST, R> unchecked() {
         return unchecked(this, ExceptionHandler.asFunction());
     }
 
-    default Function<T, R> unchecked(Function<Exception, R> exceptionHandler) {
+    default Function<FIRST, R> unchecked(Function<Exception, R> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default <V> CheckedFunction<V, R> compose(CheckedFunction<? super V, ? extends T> before) {
+    default <R$> CheckedFunction<R$, R> compose(CheckedFunction<? super R$, ? extends FIRST> before) {
         Objects.requireNonNull(before);
         return v -> apply(before.apply(v));
     }
 
-    default <V> CheckedFunction<V, R> compose(Function<? super V, ? extends T> before) {
+    default <R$> CheckedFunction<R$, R> compose(Function<? super R$, ? extends FIRST> before) {
         Objects.requireNonNull(before);
         return v -> apply(before.apply(v));
     }
 
-    default <V> CheckedFunction<T, V> andThen(CheckedFunction<? super R, ? extends V> after) {
+    default <R$> CheckedFunction<FIRST, R$> andThen(CheckedFunction<? super R, ? extends R$> after) {
         Objects.requireNonNull(after);
-        return t -> after.apply(apply(t));
+        return first -> after.apply(apply(first));
     }
 
-    default <V> CheckedFunction<T, V> andThen(Function<? super R, ? extends V> after) {
+    default <R$> CheckedFunction<FIRST, R$> andThen(Function<? super R, ? extends R$> after) {
         Objects.requireNonNull(after);
-        return t -> after.apply(apply(t));
+        return first -> after.apply(apply(first));
     }
 
-    static <T, R> Function<T, R> unchecked(CheckedFunction<T, R> checked) {
+    static <FIRST, R> Function<FIRST, R> unchecked(CheckedFunction<FIRST, R> checked) {
         return unchecked(checked, ExceptionHandler.asFunction());
     }
 
-    static <T, R> Function<T, R> unchecked(CheckedFunction<T, R> checked, Function<Exception, R> exceptionHandler) {
-        return t -> {
+    static <FIRST, R> Function<FIRST, R> unchecked(CheckedFunction<FIRST, R> checked, Function<Exception, R> exceptionHandler) {
+        return first -> {
             try {
-                return checked.apply(t);
+                return checked.apply(first);
             } catch (Exception e) {
                 return exceptionHandler.apply(e);
             }
         };
     }
 
-    static <T, R> CheckedFunction<T, R> checked(Function<T, R> function) {
+    static <FIRST, R> CheckedFunction<FIRST, R> checked(Function<FIRST, R> function) {
         return function::apply;
     }
 
-    static <T> CheckedFunction<T, T> identity() {
+    static <FIRST> CheckedFunction<FIRST, FIRST> identity() {
         return t -> t;
     }
 }

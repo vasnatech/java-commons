@@ -4,36 +4,36 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 @FunctionalInterface
-public interface CheckedTriConsumer<T, U, V> {
+public interface CheckedTriConsumer<FIRST, SECOND, THIRD> {
 
-    void accept(T t, U u, V v) throws Exception;
+    void accept(FIRST first, SECOND second, THIRD third) throws Exception;
 
-    default TriConsumer<T, U, V> unchecked() {
+    default TriConsumer<FIRST, SECOND, THIRD> unchecked() {
         return unchecked(this, ExceptionHandler.asConsumer());
     }
 
-    default CheckedTriConsumer<T, U, V> andThen(TriConsumer<? super T, ? super U, ? super V> after) {
+    default CheckedTriConsumer<FIRST, SECOND, THIRD> andThen(TriConsumer<? super FIRST, ? super SECOND, ? super THIRD> after) {
         Objects.requireNonNull(after);
-        return (t, u, v) -> { accept(t, u, v); after.accept(t, u, v); };
+        return (first, second, third) -> { accept(first, second, third); after.accept(first, second, third); };
     }
 
-    default CheckedTriConsumer<T, U, V> andThen(CheckedTriConsumer<? super T, ? super U, ? super V> after) {
+    default CheckedTriConsumer<FIRST, SECOND, THIRD> andThen(CheckedTriConsumer<? super FIRST, ? super SECOND, ? super THIRD> after) {
         Objects.requireNonNull(after);
-        return (t, u, v) -> { accept(t, u, v); after.accept(t, u, v); };
+        return (first, second, third) -> { accept(first, second, third); after.accept(first, second, third); };
     }
 
-    static <T, U, V> CheckedTriConsumer<T, U, V> checked(TriConsumer<T, U, V> unchecked) {
+    static <FIRST, SECOND, THIRD> CheckedTriConsumer<FIRST, SECOND, THIRD> checked(TriConsumer<FIRST, SECOND, THIRD> unchecked) {
         return unchecked::accept;
     }
 
-    static <T, U, V> TriConsumer<T, U, V> unchecked(CheckedTriConsumer<T, U, V> checked) {
+    static <FIRST, SECOND, THIRD> TriConsumer<FIRST, SECOND, THIRD> unchecked(CheckedTriConsumer<FIRST, SECOND, THIRD> checked) {
         return unchecked(checked, ExceptionHandler.asConsumer());
     }
 
-    static <T, U, V> TriConsumer<T, U, V> unchecked(CheckedTriConsumer<T, U, V> checked, Consumer<Exception> exceptionHandler) {
-        return (t, u, v) -> {
+    static <FIRST, SECOND, THIRD> TriConsumer<FIRST, SECOND, THIRD> unchecked(CheckedTriConsumer<FIRST, SECOND, THIRD> checked, Consumer<Exception> exceptionHandler) {
+        return (first, second, third) -> {
             try {
-                checked.accept(t, u, v);
+                checked.accept(first, second, third);
             } catch (Exception e) {
                 exceptionHandler.accept(e);
             }

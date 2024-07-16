@@ -4,54 +4,54 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 @FunctionalInterface
-public interface CheckedTriPredicate<T, U, V> {
+public interface CheckedTriPredicate<FIRST, SECOND, THIRD> {
 
-    boolean test(T t, U u, V v) throws Exception;
+    boolean test(FIRST first, SECOND second, THIRD third) throws Exception;
 
-    default TriPredicate<T, U, V> unchecked() {
+    default TriPredicate<FIRST, SECOND, THIRD> unchecked() {
         return unchecked(this, ExceptionHandler.asPredicate());
     }
 
-    default TriPredicate<T, U, V> unchecked(Predicate<Exception> exceptionHandler) {
+    default TriPredicate<FIRST, SECOND, THIRD> unchecked(Predicate<Exception> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default CheckedTriPredicate<T, U, V> and(CheckedTriPredicate<? super T, ? super U, ? super V> checked) {
+    default CheckedTriPredicate<FIRST, SECOND, THIRD> and(CheckedTriPredicate<? super FIRST, ? super SECOND, ? super THIRD> checked) {
         Objects.requireNonNull(checked);
-        return (t, u, v) -> test(t, u, v) && checked.test(t, u, v);
+        return (first, second, third) -> test(first, second, third) && checked.test(first, second, third);
     }
 
-    default CheckedTriPredicate<T, U, V> and(TriPredicate<? super T, ? super U, ? super V> unchecked) {
+    default CheckedTriPredicate<FIRST, SECOND, THIRD> and(TriPredicate<? super FIRST, ? super SECOND, ? super THIRD> unchecked) {
         Objects.requireNonNull(unchecked);
-        return (t, u, v) -> test(t, u, v) && unchecked.test(t, u, v);
+        return (first, second, third) -> test(first, second, third) && unchecked.test(first, second, third);
     }
 
-    default CheckedTriPredicate<T, U, V> negate() {
-        return (t, u, v) -> !test(t, u, v);
+    default CheckedTriPredicate<FIRST, SECOND, THIRD> negate() {
+        return (first, second, third) -> !test(first, second, third);
     }
 
-    default CheckedTriPredicate<T, U, V> or(CheckedTriPredicate<? super T, ? super U, ? super V> checked) {
+    default CheckedTriPredicate<FIRST, SECOND, THIRD> or(CheckedTriPredicate<? super FIRST, ? super SECOND, ? super THIRD> checked) {
         Objects.requireNonNull(checked);
-        return (t, u, v) -> test(t, u, v) || checked.test(t, u, v);
+        return (first, second, third) -> test(first, second, third) || checked.test(first, second, third);
     }
 
-    default CheckedTriPredicate<T, U, V> or(TriPredicate<? super T, ? super U, ? super V> unchecked) {
+    default CheckedTriPredicate<FIRST, SECOND, THIRD> or(TriPredicate<? super FIRST, ? super SECOND, ? super THIRD> unchecked) {
         Objects.requireNonNull(unchecked);
-        return (t, u, v) -> test(t, u, v) || unchecked.test(t, u, v);
+        return (first, second, third) -> test(first, second, third) || unchecked.test(first, second, third);
     }
 
-    static <T, U, V> CheckedTriPredicate<T, U, V> checked(TriPredicate<T, U, V> unchecked) {
+    static <FIRST, SECOND, THIRD> CheckedTriPredicate<FIRST, SECOND, THIRD> checked(TriPredicate<FIRST, SECOND, THIRD> unchecked) {
         return unchecked::test;
     }
 
-    static <T, U, V> TriPredicate<T, U, V> unchecked(CheckedTriPredicate<T, U, V> checked) {
+    static <FIRST, SECOND, THIRD> TriPredicate<FIRST, SECOND, THIRD> unchecked(CheckedTriPredicate<FIRST, SECOND, THIRD> checked) {
         return unchecked(checked, ExceptionHandler.asPredicate());
     }
 
-    static <T, U, V> TriPredicate<T, U, V> unchecked(CheckedTriPredicate<T, U, V> checked, Predicate<Exception> exceptionHandler) {
-        return (t, u, v) -> {
+    static <FIRST, SECOND, THIRD> TriPredicate<FIRST, SECOND, THIRD> unchecked(CheckedTriPredicate<FIRST, SECOND, THIRD> checked, Predicate<Exception> exceptionHandler) {
+        return (first, second, third) -> {
             try {
-                return checked.test(t, u, v);
+                return checked.test(first, second, third);
             } catch (Exception e) {
                 return exceptionHandler.test(e);
             }

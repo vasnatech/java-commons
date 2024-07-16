@@ -1,6 +1,6 @@
 package com.vasnatech.commons.collection;
 
-import com.vasnatech.commons.type.Pair;
+import com.vasnatech.commons.type.tuble.Pair;
 
 import java.util.HashSet;
 import java.util.Set;

@@ -4,40 +4,40 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface CheckedTriFunction<T, U, V, R> {
+public interface CheckedTriFunction<FIRST, SECOND, THIRD, R> {
 
-    R apply(T t, U u, V v) throws Exception;
+    R apply(FIRST first, SECOND second, THIRD third) throws Exception;
 
-    default TriFunction<T, U, V, R> unchecked() {
+    default TriFunction<FIRST, SECOND, THIRD, R> unchecked() {
         return unchecked(this, ExceptionHandler.asFunction());
     }
 
-    default TriFunction<T, U, V, R> unchecked(Function<Exception, R> exceptionHandler) {
+    default TriFunction<FIRST, SECOND, THIRD, R> unchecked(Function<Exception, R> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default <W> CheckedTriFunction<T, U, V, W> andThen(CheckedFunction<? super R, ? extends W> after) {
+    default <W> CheckedTriFunction<FIRST, SECOND, THIRD, W> andThen(CheckedFunction<? super R, ? extends W> after) {
         Objects.requireNonNull(after);
-        return (t, u, v) -> after.apply(apply(t, u, v));
+        return (first, second, third) -> after.apply(apply(first, second, third));
     }
 
-    default <W> CheckedTriFunction<T, U, V, W> andThen(Function<? super R, ? extends W> after) {
+    default <R$> CheckedTriFunction<FIRST, SECOND, THIRD, R$> andThen(Function<? super R, ? extends R$> after) {
         Objects.requireNonNull(after);
-        return (t, u, v) -> after.apply(apply(t, u, v));
+        return (first, second, third) -> after.apply(apply(first, second, third));
     }
 
-    static <T, U, V, R> CheckedTriFunction<T, U, V, R> checked(TriFunction<T, U, V, R> function) {
+    static <FIRST, SECOND, THIRD, R> CheckedTriFunction<FIRST, SECOND, THIRD, R> checked(TriFunction<FIRST, SECOND, THIRD, R> function) {
         return function::apply;
     }
 
-    static <T, U, V, R> TriFunction<T, U, V, R> unchecked(CheckedTriFunction<T, U, V, R> checked) {
+    static <FIRST, SECOND, THIRD, R> TriFunction<FIRST, SECOND, THIRD, R> unchecked(CheckedTriFunction<FIRST, SECOND, THIRD, R> checked) {
         return unchecked(checked, ExceptionHandler.asFunction());
     }
 
-    static <T, U, V, R> TriFunction<T, U, V, R> unchecked(CheckedTriFunction<T, U, V, R> checked, Function<Exception, R> exceptionHandler) {
-        return (t, u, v) -> {
+    static <FIRST, SECOND, THIRD, R> TriFunction<FIRST, SECOND, THIRD, R> unchecked(CheckedTriFunction<FIRST, SECOND, THIRD, R> checked, Function<Exception, R> exceptionHandler) {
+        return (first, second, third) -> {
             try {
-                return checked.apply(t, u, v);
+                return checked.apply(first, second, third);
             } catch (Exception e) {
                 return exceptionHandler.apply(e);
             }

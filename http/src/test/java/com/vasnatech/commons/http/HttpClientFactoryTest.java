@@ -1,6 +1,6 @@
 package com.vasnatech.commons.http;
 
-import com.vasnatech.commons.type.Pair;
+import com.vasnatech.commons.type.tuble.Pair;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.assertj.core.api.SoftAssertions;
 import org.junit.jupiter.api.Test;

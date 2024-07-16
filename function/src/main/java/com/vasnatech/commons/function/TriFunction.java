@@ -4,20 +4,20 @@ import java.util.Objects;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface TriFunction<T, U, V, R> {
+public interface TriFunction<FIRST, SECOND, THIRD, R> {
 
-    R apply(T t, U u, V v);
+    R apply(FIRST first, SECOND second, THIRD third);
 
-    default <S> TriFunction<T, U, V, S> andThen(Function<? super R, ? extends S> after) {
+    default <R$> TriFunction<FIRST, SECOND, THIRD, R$> andThen(Function<? super R, ? extends R$> after) {
         Objects.requireNonNull(after);
-        return (t, u, v) -> after.apply(apply(t, u, v));
+        return (first, second, third) -> after.apply(apply(first, second, third));
     }
 
-    default <T$, U$, V$> TriFunction<T$, U$, V$, R> compose(
-            Function<? super T$, ? extends T> tFunction,
-            Function<? super U$, ? extends U> uFunction,
-            Function<? super V$, ? extends V> vFunction
+    default <FIRST$, SECOND$, THIRD$> TriFunction<FIRST$, SECOND$, THIRD$, R> compose(
+            Function<? super FIRST$, ? extends FIRST> firstFunction,
+            Function<? super SECOND$, ? extends SECOND> secondFunction,
+            Function<? super THIRD$, ? extends THIRD> thirdFunction
     ) {
-        return (t, u, v) -> apply(tFunction.apply(t), uFunction.apply(u), vFunction.apply(v));
+        return (first, second, third) -> apply(firstFunction.apply(first), secondFunction.apply(second), thirdFunction.apply(third));
     }
 }

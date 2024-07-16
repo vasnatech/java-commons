@@ -5,28 +5,28 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 @FunctionalInterface
-public interface CheckedSupplier<T> extends Callable<T> {
+public interface CheckedSupplier<FIRST> extends Callable<FIRST> {
 
-    T get() throws Exception;
+    FIRST get() throws Exception;
 
     @Override
-    default T call() throws Exception {
+    default FIRST call() throws Exception {
         return get();
     }
 
-    default Supplier<T> unchecked() {
+    default Supplier<FIRST> unchecked() {
         return unchecked(this, ExceptionHandler.asFunction());
     }
 
-    default Supplier<T> unchecked(Function<Exception, T> exceptionHandler) {
+    default Supplier<FIRST> unchecked(Function<Exception, FIRST> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    static <T> Supplier<T> unchecked(CheckedSupplier<T> checked) {
+    static <FIRST> Supplier<FIRST> unchecked(CheckedSupplier<FIRST> checked) {
         return unchecked(checked, ExceptionHandler.asFunction());
     }
 
-    static <T> Supplier<T> unchecked(CheckedSupplier<T> checked, Function<Exception, T> exceptionHandler) {
+    static <FIRST> Supplier<FIRST> unchecked(CheckedSupplier<FIRST> checked, Function<Exception, FIRST> exceptionHandler) {
         return () -> {
             try {
                 return checked.get();
@@ -36,7 +36,7 @@ public interface CheckedSupplier<T> extends Callable<T> {
         };
     }
 
-    static <T> CheckedSupplier<T> checked(Supplier<T> supplier) {
+    static <FIRST> CheckedSupplier<FIRST> checked(Supplier<FIRST> supplier) {
         return supplier::get;
     }
 }

@@ -1,19 +1,19 @@
 package com.vasnatech.commons.function;
 
 @FunctionalInterface
-public interface TriPredicate<T, U, V> {
+public interface TriPredicate<FIRST, SECOND, THIRD> {
 
-    boolean test(T t, U u, V v);
+    boolean test(FIRST first, SECOND second, THIRD third);
 
-    default TriPredicate<T, U, V> and(TriPredicate<? super T, ? super U, ? super V> other) {
-        return (t, u, v) -> test(t, u, v) && other.test(t, u, v);
+    default TriPredicate<FIRST, SECOND, THIRD> and(TriPredicate<? super FIRST, ? super SECOND, ? super THIRD> other) {
+        return (first, second, third) -> test(first, second, third) && other.test(first, second, third);
     }
 
-    default TriPredicate<T, U, V> negate() {
-        return (t, u, v) -> !test(t, u, v);
+    default TriPredicate<FIRST, SECOND, THIRD> negate() {
+        return (first, second, third) -> !test(first, second, third);
     }
 
-    default TriPredicate<T, U, V> or(TriPredicate<? super T, ? super U, ? super V> other) {
-        return (t, u, v) -> test(t, u, v) || other.test(t, u, v);
+    default TriPredicate<FIRST, SECOND, THIRD> or(TriPredicate<? super FIRST, ? super SECOND, ? super THIRD> other) {
+        return (first, second, third) -> test(first, second, third) || other.test(first, second, third);
     }
 }

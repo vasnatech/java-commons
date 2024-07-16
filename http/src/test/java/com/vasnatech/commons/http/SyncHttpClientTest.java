@@ -1,6 +1,6 @@
 package com.vasnatech.commons.http;
 
-import com.vasnatech.commons.type.tuble.Pair;
+import com.vasnatech.commons.type.tuple.Pair;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;

@@ -1,4 +1,4 @@
-package com.vasnatech.commons.type.tuble;
+package com.vasnatech.commons.type.tuple;
 
 import java.util.Arrays;
 import java.util.List;

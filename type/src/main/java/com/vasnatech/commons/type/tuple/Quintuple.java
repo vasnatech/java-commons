@@ -36,6 +36,24 @@ public interface Quintuple<FIRST, SECOND, THIRD, FOURTH, FIFTH> extends Tuple {
     Quadruple<FIRST, SECOND, THIRD, FOURTH> removeFifth();
 
     @Override
+    @SuppressWarnings("unchecked")
+    default FIRST head() {
+        return first();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    default FIFTH tail() {
+        return fifth();
+    }
+
+    default Quadruple<SECOND, THIRD, FOURTH, FIFTH> removeHead() {
+        return removeFirst();
+    }
+    default Quadruple<FIRST, SECOND, THIRD, FOURTH> removeTail() {
+        return removeFifth();
+    }
+
+    @Override
     default int length() {
         return 5;
     }

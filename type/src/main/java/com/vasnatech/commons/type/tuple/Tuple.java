@@ -1,12 +1,13 @@
 package com.vasnatech.commons.type.tuple;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public interface Tuple extends Comparable<Tuple> {
+public interface Tuple extends Comparable<Tuple>, Iterable<Object> {
 
     int length();
 
@@ -14,12 +15,23 @@ public interface Tuple extends Comparable<Tuple> {
     <V> void set(int index, V value);
     Tuple remove(int index);
 
+    <V> V head();
+    Tuple removeHead();
+
+    <V> V tail();
+    Tuple removeTail();
+
     default Object[] toArray() {
         return IntStream.range(0, length()).mapToObj(this::get).toArray(Object[]::new);
     }
 
     default List<?> toList() {
         return IntStream.range(0, length()).mapToObj(this::get).toList();
+    }
+
+    @Override
+    default Iterator<Object> iterator() {
+        return new TupleIterator(this);
     }
 
     <A> Tuple append(A newValue);
@@ -57,8 +69,7 @@ public interface Tuple extends Comparable<Tuple> {
                         continue;
                     return result;
                 }
-            }
-            else if (thatElementClass.isAssignableFrom(thisElementClass)) {
+            } else if (thatElementClass.isAssignableFrom(thisElementClass)) {
                 if (Comparable.class.isAssignableFrom(thatElementClass)) {
                     int result = ((Comparable)thatElement).compareTo(thisElement);
                     if (result == 0)
@@ -101,5 +112,95 @@ public interface Tuple extends Comparable<Tuple> {
                 .flatMap(Function.identity())
                 .toArray()
         );
+    }
+
+
+    static <FIRST> Tuple immutable(FIRST first) {
+        return Single.immutable(first);
+    }
+
+    static <FIRST, SECOND> Tuple immutable(FIRST first, SECOND second) {
+        return Pair.immutable(first, second);
+    }
+
+    static <FIRST, SECOND, THIRD> Tuple immutable(FIRST first, SECOND second, THIRD third) {
+        return Triple.immutable(first, second, third);
+    }
+
+    static <FIRST, SECOND, THIRD, FOURTH> Tuple immutable(FIRST first, SECOND second, THIRD third, FOURTH fourth) {
+        return Quadruple.immutable(first, second, third, fourth);
+    }
+
+    static <FIRST, SECOND, THIRD, FOURTH, FIFTH> Tuple immutable(FIRST first, SECOND second, THIRD third, FOURTH fourth, FIFTH fifth) {
+        return Quintuple.immutable(first, second, third, fourth, fifth);
+    }
+
+    static Tuple immutable(Object first, Object second, Object third, Object fourth, Object fifth, Object sixth, Object... elements) {
+        return TupleN.immutable(
+                Stream.of(
+                        Stream.of(first, second, third, fourth, fifth, sixth),
+                        Stream.of(elements)
+                )
+                .flatMap(Function.identity())
+                .toArray()
+        );
+    }
+
+
+    static <FIRST> Tuple mutable(FIRST first) {
+        return Single.mutable(first);
+    }
+
+    static <FIRST, SECOND> Tuple mutable(FIRST first, SECOND second) {
+        return Pair.mutable(first, second);
+    }
+
+    static <FIRST, SECOND, THIRD> Tuple mutable(FIRST first, SECOND second, THIRD third) {
+        return Triple.mutable(first, second, third);
+    }
+
+    static <FIRST, SECOND, THIRD, FOURTH> Tuple mutable(FIRST first, SECOND second, THIRD third, FOURTH fourth) {
+        return Quadruple.mutable(first, second, third, fourth);
+    }
+
+    static <FIRST, SECOND, THIRD, FOURTH, FIFTH> Tuple mutable(FIRST first, SECOND second, THIRD third, FOURTH fourth, FIFTH fifth) {
+        return Quintuple.mutable(first, second, third, fourth, fifth);
+    }
+
+    static Tuple mutable(Object first, Object second, Object third, Object fourth, Object fifth, Object sixth, Object... elements) {
+        return TupleN.mutable(
+                Stream.of(
+                        Stream.of(first, second, third, fourth, fifth, sixth),
+                        Stream.of(elements)
+                )
+                .flatMap(Function.identity())
+                .toArray()
+        );
+    }
+
+
+    class TupleIterator implements Iterator<Object> {
+
+        final Tuple tuple;
+        int index = -1;
+
+        public TupleIterator(Tuple tuple) {
+            this.tuple = tuple;
+        }
+
+        @Override
+        public boolean hasNext() {
+            return index + 1 < tuple.length();
+        }
+
+        @Override
+        public Object next() {
+            return tuple.get(++index);
+        }
+
+        @Override
+        public void remove() {
+            tuple.remove(index);
+        }
     }
 }

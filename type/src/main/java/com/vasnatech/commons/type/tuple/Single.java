@@ -15,6 +15,26 @@ public interface Single<FIRST> extends Tuple {
     Tuple0 removeFirst();
 
     @Override
+    @SuppressWarnings("unchecked")
+    default FIRST head() {
+        return first();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    default FIRST tail() {
+        return first();
+    }
+
+    @Override
+    default Tuple0 removeHead() {
+        return removeFirst();
+    }
+    @Override
+    default Tuple0 removeTail() {
+        return removeFirst();
+    }
+
+    @Override
     default int length() {
         return 1;
     }

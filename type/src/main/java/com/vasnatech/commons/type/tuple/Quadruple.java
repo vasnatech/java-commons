@@ -32,6 +32,24 @@ public interface Quadruple<FIRST, SECOND, THIRD, FOURTH> extends Tuple {
     Triple<FIRST, SECOND, THIRD> removeFourth();
 
     @Override
+    @SuppressWarnings("unchecked")
+    default FIRST head() {
+        return first();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    default FOURTH tail() {
+        return fourth();
+    }
+
+    default Triple<SECOND, THIRD, FOURTH> removeHead() {
+        return removeFirst();
+    }
+    default Triple<FIRST, SECOND, THIRD> removeTail() {
+        return removeFourth();
+    }
+
+    @Override
     default int length() {
         return 4;
     }

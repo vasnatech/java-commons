@@ -30,6 +30,24 @@ public interface Triple<FIRST, SECOND, THIRD> extends Tuple {
     Pair<FIRST, SECOND> removeThird();
 
     @Override
+    @SuppressWarnings("unchecked")
+    default FIRST head() {
+        return first();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    default THIRD tail() {
+        return third();
+    }
+
+    default Pair<SECOND, THIRD> removeHead() {
+        return removeFirst();
+    }
+    default Pair<FIRST, SECOND> removeTail() {
+        return removeThird();
+    }
+
+    @Override
     default int length() {
         return 3;
     }

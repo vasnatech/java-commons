@@ -26,6 +26,18 @@ abstract class TupleN implements Tuple {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
+    public <V> V head() {
+        return (V) elements[0];
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public <V> V tail() {
+        return (V) elements[elements.length - 1];
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o instanceof TupleN that) {
@@ -69,6 +81,15 @@ abstract class TupleN implements Tuple {
         @Override
         public <V> void set(int index, V value) {
             throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Tuple removeHead() {
+            return new Immutable(Arrays.copyOfRange(elements, 1, elements.length));
+        }
+        @Override
+        public Tuple removeTail() {
+            return new Immutable(Arrays.copyOfRange(elements, 0, elements.length-1));
         }
 
         @Override
@@ -116,6 +137,15 @@ abstract class TupleN implements Tuple {
         @Override
         public <V> void set(int index, V value) {
             elements[index] = value;
+        }
+
+        @Override
+        public Tuple removeHead() {
+            return new Mutable(Arrays.copyOfRange(elements, 1, elements.length));
+        }
+        @Override
+        public Tuple removeTail() {
+            return new Mutable(Arrays.copyOfRange(elements, 0, elements.length-1));
         }
 
         @Override

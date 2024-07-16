@@ -10,8 +10,7 @@ public interface Tuple0 extends Tuple {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    default Object get(int index) {
+    default <V> V get(int index) {
         throw new IndexOutOfBoundsException(index);
     }
 
@@ -23,6 +22,24 @@ public interface Tuple0 extends Tuple {
     @Override
     default Tuple remove(int index) {
         throw new IndexOutOfBoundsException(index);
+    }
+
+    @Override
+    default <V> V head() {
+        throw new IndexOutOfBoundsException();
+    }
+    @Override
+    default <V> V tail() {
+        throw new IndexOutOfBoundsException();
+    }
+
+    @Override
+    default Tuple removeHead() {
+        throw new IndexOutOfBoundsException();
+    }
+    @Override
+    default Tuple removeTail() {
+        throw new IndexOutOfBoundsException();
     }
 
     @Override

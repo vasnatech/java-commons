@@ -11,7 +11,7 @@ import java.util.StringJoiner;
 import java.util.function.*;
 import java.util.stream.Collectors;
 
-public interface Pair<FIRST, SECOND> extends Tuple,  Map.Entry<FIRST, SECOND> {
+public interface Pair<FIRST, SECOND> extends Tuple, Map.Entry<FIRST, SECOND> {
 
     FIRST first();
     void first(FIRST newValue);
@@ -20,6 +20,26 @@ public interface Pair<FIRST, SECOND> extends Tuple,  Map.Entry<FIRST, SECOND> {
     SECOND second();
     void second(SECOND newValue);
     Single<FIRST> removeSecond();
+
+    @Override
+    @SuppressWarnings("unchecked")
+    default FIRST head() {
+        return first();
+    }
+    @Override
+    @SuppressWarnings("unchecked")
+    default SECOND tail() {
+        return second();
+    }
+
+    @Override
+    default Single<SECOND> removeHead() {
+        return removeFirst();
+    }
+    @Override
+    default Single<FIRST> removeTail() {
+        return removeSecond();
+    }
 
     @Override
     default int length() {

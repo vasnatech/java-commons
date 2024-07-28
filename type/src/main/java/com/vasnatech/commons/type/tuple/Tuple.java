@@ -15,10 +15,10 @@ public interface Tuple extends Comparable<Tuple>, Iterable<Object> {
     <V> void set(int index, V value);
     Tuple remove(int index);
 
-    <V> V head();
+    Object head();
     Tuple removeHead();
 
-    <V> V tail();
+    Object tail();
     Tuple removeTail();
 
     default Object[] toArray() {

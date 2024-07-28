@@ -4,6 +4,7 @@ import com.vasnatech.commons.serialize.Deserializer;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.Map;
 
 public interface Decoder extends Deserializer {
@@ -13,6 +14,8 @@ public interface Decoder extends Deserializer {
     <T, R extends T> R fromString(String jsonString, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
 
     <T, R extends T> R fromInputStream(InputStream in, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
+
+    <T, R extends T> R fromReader(Reader reader, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
 
 
     default Map<String, ?> fromByteArrayToMap(byte[] bytes) throws IOException {
@@ -25,6 +28,10 @@ public interface Decoder extends Deserializer {
 
     default Map<String, ?> fromInputStreamToMap(InputStream in) throws IOException {
         return fromInputStream(in, Map.class, String.class, Object.class);
+    }
+
+    default Map<String, ?> fromReaderToMap(Reader reader) throws IOException {
+        return fromReader(reader, Map.class, String.class, Object.class);
     }
 
 

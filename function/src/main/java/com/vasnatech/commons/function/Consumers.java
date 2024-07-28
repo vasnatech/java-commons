@@ -49,40 +49,116 @@ public final class Consumers {
         return consumer;
     }
 
-    public static <FIRST> Consumer<FIRST> unchecked(CheckedConsumer<FIRST> checkedConsumer) {
-        return checkedConsumer.unchecked();
+    public static <FIRST, SECOND> BiConsumer<FIRST, SECOND> of(Consumer<? super FIRST> firstConsumer, Consumer<? super SECOND> secondConsumer) {
+        return (first, second) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+        };
     }
 
-    public static <FIRST> CheckedConsumer<FIRST> checked(Consumer<FIRST> unchecked) {
-        return CheckedConsumer.checked(unchecked);
+    public static <FIRST, SECOND, THIRD> TriConsumer<FIRST, SECOND, THIRD> of(Consumer<? super FIRST> firstConsumer, Consumer<? super SECOND> secondConsumer, Consumer<? super THIRD> thirdConsumer) {
+        return (first, second, third) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+            thirdConsumer.accept(third);
+        };
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH> TetraConsumer<FIRST, SECOND, THIRD, FOURTH> of(Consumer<? super FIRST> firstConsumer, Consumer<? super SECOND> secondConsumer, Consumer<? super THIRD> thirdConsumer, Consumer<? super FOURTH> fourthConsumer) {
+        return (first, second, third, fourth) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+            thirdConsumer.accept(third);
+            fourthConsumer.accept(fourth);
+        };
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> of(Consumer<? super FIRST> firstConsumer, Consumer<? super SECOND> secondConsumer, Consumer<? super THIRD> thirdConsumer, Consumer<? super FOURTH> fourthConsumer, Consumer<? super FIFTH> fifthConsumer) {
+        return (first, second, third, fourth, fifth) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+            thirdConsumer.accept(third);
+            fourthConsumer.accept(fourth);
+            fifthConsumer.accept(fifth);
+        };
+    }
+
+
+    public static <FIRST> CheckedConsumer<FIRST> of(CheckedConsumer<FIRST> consumer) {
+        return consumer;
+    }
+
+    public static <FIRST, SECOND> CheckedBiConsumer<FIRST, SECOND> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer) {
+        return (first, second) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+        };
+    }
+
+    public static <FIRST, SECOND, THIRD> CheckedTriConsumer<FIRST, SECOND, THIRD> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer, CheckedConsumer<? super THIRD> thirdConsumer) {
+        return (first, second, third) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+            thirdConsumer.accept(third);
+        };
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer, CheckedConsumer<? super THIRD> thirdConsumer, CheckedConsumer<? super FOURTH> fourthConsumer) {
+        return (first, second, third, fourth) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+            thirdConsumer.accept(third);
+            fourthConsumer.accept(fourth);
+        };
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer, CheckedConsumer<? super THIRD> thirdConsumer, CheckedConsumer<? super FOURTH> fourthConsumer, CheckedConsumer<? super FIFTH> fifthConsumer) {
+        return (first, second, third, fourth, fifth) -> {
+            firstConsumer.accept(first);
+            secondConsumer.accept(second);
+            thirdConsumer.accept(third);
+            fourthConsumer.accept(fourth);
+            fifthConsumer.accept(fifth);
+        };
+    }
+
+
+    public static <FIRST> Consumer<FIRST> unchecked(CheckedConsumer<FIRST> checkedConsumer) {
+        return checkedConsumer.unchecked();
     }
 
     public static <FIRST, SECOND> BiConsumer<FIRST, SECOND> unchecked(CheckedBiConsumer<FIRST, SECOND> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND> CheckedBiConsumer<FIRST, SECOND> checked(BiConsumer<FIRST, SECOND> unchecked) {
-        return CheckedBiConsumer.checked(unchecked);
-    }
-
     public static <FIRST, SECOND, THIRD> TriConsumer<FIRST, SECOND, THIRD> unchecked(CheckedTriConsumer<FIRST, SECOND, THIRD> checked) {
         return checked.unchecked();
-    }
-
-    public static <FIRST, SECOND, THIRD> CheckedTriConsumer<FIRST, SECOND, THIRD> checked(TriConsumer<FIRST, SECOND, THIRD> unchecked) {
-        return CheckedTriConsumer.checked(unchecked);
     }
 
     public static <FIRST, SECOND, THIRD, FOURTH> TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked(CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> checked(TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked) {
-        return CheckedTetraConsumer.checked(unchecked);
-    }
-
     public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked(CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> checked) {
         return checked.unchecked();
+    }
+
+
+
+    public static <FIRST> CheckedConsumer<FIRST> checked(Consumer<FIRST> unchecked) {
+        return CheckedConsumer.checked(unchecked);
+    }
+
+    public static <FIRST, SECOND> CheckedBiConsumer<FIRST, SECOND> checked(BiConsumer<FIRST, SECOND> unchecked) {
+        return CheckedBiConsumer.checked(unchecked);
+    }
+
+    public static <FIRST, SECOND, THIRD> CheckedTriConsumer<FIRST, SECOND, THIRD> checked(TriConsumer<FIRST, SECOND, THIRD> unchecked) {
+        return CheckedTriConsumer.checked(unchecked);
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> checked(TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked) {
+        return CheckedTetraConsumer.checked(unchecked);
     }
 
     public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> checked(PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked) {

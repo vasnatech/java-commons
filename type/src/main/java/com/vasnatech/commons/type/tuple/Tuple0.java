@@ -25,11 +25,11 @@ public interface Tuple0 extends Tuple {
     }
 
     @Override
-    default <V> V head() {
+    default Object head() {
         throw new IndexOutOfBoundsException();
     }
     @Override
-    default <V> V tail() {
+    default Object tail() {
         throw new IndexOutOfBoundsException();
     }
 

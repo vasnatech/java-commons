@@ -154,4 +154,10 @@ public final class Lists {
     public static List<?> deepCopy(List<?> source) {
         return source.stream().map(Objects::deepCopy).collect(Collectors.toList());
     }
+
+    public static <T> List<T> reversed(List<T> list) {
+        List<T> result = new ArrayList<>(list);
+        java.util.Collections.reverse(result);
+        return result;
+    }
 }

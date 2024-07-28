@@ -26,15 +26,13 @@ abstract class TupleN implements Tuple {
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <V> V head() {
-        return (V) elements[0];
+    public Object head() {
+        return elements[0];
     }
 
     @Override
-    @SuppressWarnings("unchecked")
-    public <V> V tail() {
-        return (V) elements[elements.length - 1];
+    public Object tail() {
+        return elements[elements.length - 1];
     }
 
     @Override

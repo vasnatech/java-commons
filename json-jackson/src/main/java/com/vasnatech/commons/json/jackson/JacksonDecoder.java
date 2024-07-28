@@ -4,6 +4,7 @@ import com.vasnatech.commons.json.Decoder;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 
 public class JacksonDecoder extends Jackson implements Decoder {
 
@@ -22,6 +23,10 @@ public class JacksonDecoder extends Jackson implements Decoder {
         return OBJECT_MAPPER.readValue(in, toJavaType(rawClass, parameterClasses));
     }
 
+    @Override
+    public <T, R extends T> R fromReader(Reader reader, Class<T> rawClass, Class<?>... parameterClasses) throws IOException {
+        return OBJECT_MAPPER.readValue(reader, toJavaType(rawClass, parameterClasses));
+    }
 
     @Override
     public <T, R extends T> R deserialize(InputStream in, Class<T> rawClass, Class<?>... parameterClasses) throws IOException {

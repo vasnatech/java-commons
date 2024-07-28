@@ -15,6 +15,7 @@ import com.vasnatech.commons.schema.validate.SchemaValidatorFactory;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Reader;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -50,16 +51,20 @@ public class JacksonJsonSchemaLoader implements SchemaLoader {
         return load(jsonFactory.createParser(in));
     }
 
+    @Override
+    public <S extends Schema> S load(Reader reader) throws IOException {
+        return load(jsonFactory.createParser(reader));
+    }
+
     public <S extends Schema> S load(JsonParser parser) throws IOException {
         Map<String, String> meta = null;
         parser.nextToken();
         if (parser.currentToken() == JsonToken.START_OBJECT) {
             parser.nextToken();
-            while (parser.currentToken() == JsonToken.FIELD_NAME) {
+            if (parser.currentToken() == JsonToken.FIELD_NAME) {
                 String fieldName = parser.currentName();
                 if ("meta".equals(fieldName)) {
                     meta = parseMeta(parser);
-                    break;
                 }
             }
         }

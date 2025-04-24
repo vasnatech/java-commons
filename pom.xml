@@ -22,6 +22,8 @@
         <module>json</module>
         <module>json-jackson</module>
         <module>primitive</module>
+        <module>properties</module>
+        <module>properties-jackson</module>
         <module>queue</module>
         <module>random</module>
         <module>reflection</module>
@@ -38,7 +40,7 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <org.apache.commons-lang.version>3.14.0</org.apache.commons-lang.version>
-        <com.fasterxml.jackson.version>2.17.1</com.fasterxml.jackson.version>
+        <com.fasterxml.jackson.version>2.17.2</com.fasterxml.jackson.version>
         <org.junit.jupiter.version>5.10.2</org.junit.jupiter.version>
         <org.assertj.version>3.26.0</org.assertj.version>
         <org.mockito.version>5.12.0</org.mockito.version>

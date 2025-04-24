@@ -30,6 +30,78 @@ public interface Resources {
         return Files.newInputStream(path);
     }
 
+    static Reader asReader(Object relativeTo, String name) {
+        return asReader(asInputStream(relativeTo.getClass(), name));
+    }
+
+    static Reader asReader(Class<?> relativeTo, String name) {
+        return asReader(relativeTo.getResourceAsStream(name));
+    }
+
+    static Reader asReader(String name) {
+        return asReader(Thread.currentThread().getContextClassLoader().getResourceAsStream(name));
+    }
+
+    static Reader asReader(Path path) throws IOException {
+        return Files.newBufferedReader(path);
+    }
+
+    static Reader asReader(InputStream in) {
+        return asReader(in, StandardCharsets.UTF_8);
+    }
+
+    static Reader asReader(InputStream in, Charset encoding) {
+        return new InputStreamReader(in, encoding);
+    }
+
+    static byte[] asByteArray(Object relativeTo, String name) throws IOException {
+        return asByteArray(asInputStream(relativeTo.getClass(), name));
+    }
+
+    static byte[] asByteArray(Class<?> relativeTo, String name) throws IOException {
+        return asByteArray(relativeTo.getResourceAsStream(name));
+    }
+
+    static byte[] asByteArray(String name) throws IOException {
+        return asByteArray(Thread.currentThread().getContextClassLoader().getResourceAsStream(name));
+    }
+
+    static byte[] asByteArray(InputStream in) throws IOException {
+        return asByteArray(in, 4096);
+    }
+
+    static byte[] asByteArray(InputStream in, int bufferSize) throws IOException {
+        int available = in.available();
+        byte[] buffer;
+        if (available == 0) //not sure how many bytes are there in the stream
+            buffer = new byte[bufferSize];
+        else
+            buffer = new byte[available];
+        int offset = 0;
+        int n;
+        while (-1 != (n = in.read(buffer, offset, buffer.length - offset))) {
+            offset += n;
+            if (offset == buffer.length) { //ensure capacity
+                long newSize = Math.min(buffer.length * 2L, Integer.MAX_VALUE);
+                if (newSize == buffer.length) //can't allocate more memory. array limitation.
+                    throw new OutOfMemoryError();
+                byte[] newBuffer = new byte[(int)newSize];
+                System.arraycopy(buffer, 0, newBuffer, 0, buffer.length);
+                buffer = newBuffer;
+            }
+        }
+        if (offset < buffer.length) {
+            byte[] result = new byte[offset];
+            System.arraycopy(buffer, 0, result, 0, offset);
+            return result;
+        }
+        return buffer;
+    }
+
+    static byte[] asByteArray(Path path) throws IOException {
+        return Files.readAllBytes(path);
+    }
+
     static String asString(Object relativeTo, String name) throws IOException {
         return asString(relativeTo.getClass(), name);
     }

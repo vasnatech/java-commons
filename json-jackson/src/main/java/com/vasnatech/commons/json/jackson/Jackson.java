@@ -13,7 +13,8 @@ public class Jackson {
 
     static final ObjectMapper OBJECT_MAPPER = new ObjectMapper()
                 .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-                .setSerializationInclusion(JsonInclude.Include.NON_NULL);
+                .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+                .findAndRegisterModules();
 
     static final TypeReference<Map<String, ?>> TYPE_MAP = new TypeReference<>() {};
 

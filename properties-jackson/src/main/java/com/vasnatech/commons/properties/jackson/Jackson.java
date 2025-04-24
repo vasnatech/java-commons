@@ -11,13 +11,21 @@ import java.util.Map;
 
 public class Jackson {
 
-    static final JavaPropsMapper OBJECT_MAPPER = (JavaPropsMapper) new JavaPropsMapper()
-            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
-            .setSerializationInclusion(JsonInclude.Include.NON_NULL);
-
     static final TypeReference<Map<String, ?>> TYPE_MAP = new TypeReference<>() {};
 
+    static final JavaPropsMapper DEFAULT_OBJECT_MAPPER = (JavaPropsMapper) new JavaPropsMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL)
+            .findAndRegisterModules();
+
+    static JavaPropsMapper OBJECT_MAPPER = DEFAULT_OBJECT_MAPPER;
+
     public static void init() {
+        init(DEFAULT_OBJECT_MAPPER);
+    }
+
+    public static void init(JavaPropsMapper objectMapper) {
+        OBJECT_MAPPER = objectMapper;
         Properties.setProperties(new Properties(new JacksonEncoder(), new JacksonDecoder()));
     }
 

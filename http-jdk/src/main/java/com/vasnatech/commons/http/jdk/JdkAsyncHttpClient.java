@@ -20,28 +20,35 @@ public class JdkAsyncHttpClient<REQ, RES> extends JdkHttpClient<REQ, RES> implem
     }
 
     @Override
-    public CompletableFuture<RES> get(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+    public CompletableFuture<RES> invoke(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+        return switch (endpoint.method) {
+            case GET -> get(parameters, requestHeaders);
+            case POST -> post(requestBody, parameters, requestHeaders);
+            case PUT -> put(requestBody, parameters, requestHeaders);
+            case DELETE -> delete(parameters, requestHeaders);
+            default -> throw new HttpClientException(0, "Unsupported http method " + endpoint.method);
+        };
+    }
+
+    CompletableFuture<RES> get(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
         return response(request(parameters, requestHeaders).GET());
     }
 
-    @Override
-    public CompletableFuture<RES> post(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
-        return response(
-                request(parameters, requestHeaders)
-                        .POST(BodyPublishers.ofInputStream(requestBodyInputStream(requestBody)))
-        );
+    CompletableFuture<RES> post(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+        HttpRequest.BodyPublisher bodyPublisher = requestBody == null
+                ? BodyPublishers.noBody()
+                : BodyPublishers.ofInputStream(requestBodyInputStream(requestBody));
+        return response(request(parameters, requestHeaders).POST(bodyPublisher));
     }
 
-    @Override
-    public CompletableFuture<RES> put(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
-        return response(
-                request(parameters, requestHeaders)
-                        .PUT(BodyPublishers.ofInputStream(requestBodyInputStream(requestBody)))
-        );
+    CompletableFuture<RES> put(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+        HttpRequest.BodyPublisher bodyPublisher = requestBody == null
+                ? BodyPublishers.noBody()
+                : BodyPublishers.ofInputStream(requestBodyInputStream(requestBody));
+        return response(request(parameters, requestHeaders).PUT(bodyPublisher));
     }
 
-    @Override
-    public CompletableFuture<RES> delete(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+    CompletableFuture<RES> delete(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
         return response(request(parameters, requestHeaders).DELETE());
     }
 

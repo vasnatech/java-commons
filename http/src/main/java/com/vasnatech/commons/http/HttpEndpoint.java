@@ -20,6 +20,7 @@ public class HttpEndpoint<REQ, RES> {
     public final Function<InputStream, RES> deserializer;
     public final String group;
     public final String name;
+    public final HttpMethod method;
     public final ParametrizedString urlTemplate;
     public final Map<String, String> requestHeaders;
 
@@ -30,6 +31,7 @@ public class HttpEndpoint<REQ, RES> {
             Function<InputStream, RES> deserializer,
             String group,
             String name,
+            HttpMethod method,
             ParametrizedString urlTemplate,
             Map<String, String> requestHeaders
     ) {
@@ -39,6 +41,7 @@ public class HttpEndpoint<REQ, RES> {
         this.deserializer = deserializer;
         this.group = group;
         this.name = name;
+        this.method = method;
         this.urlTemplate = urlTemplate;
         this.requestHeaders = requestHeaders;
     }
@@ -50,6 +53,7 @@ public class HttpEndpoint<REQ, RES> {
             Deserializer deserializer,
             String group,
             String name,
+            HttpMethod method,
             ParametrizedString urlTemplate,
             Map<String, String> requestHeaders
     ) {
@@ -59,6 +63,7 @@ public class HttpEndpoint<REQ, RES> {
         this.deserializer = toFunction(deserializer, responseBodyType);
         this.group = group;
         this.name = name;
+        this.method = method;
         this.urlTemplate = urlTemplate;
         this.requestHeaders = requestHeaders;
     }
@@ -69,6 +74,14 @@ public class HttpEndpoint<REQ, RES> {
 
     public SyncHttpClient.SyncCaller<REQ, RES> sync(String key) {
         return HttpClientFactory.sync(key, this).caller();
+    }
+
+    public AsyncHttpClient.ASyncCaller<REQ, RES> async() {
+        return async(null);
+    }
+
+    public AsyncHttpClient.ASyncCaller<REQ, RES> async(String key) {
+        return HttpClientFactory.async(key, this).caller();
     }
 
 
@@ -94,6 +107,7 @@ public class HttpEndpoint<REQ, RES> {
         Function<InputStream, RES> deserializer;
         String group;
         String name;
+        HttpMethod method;
         ParametrizedString urlTemplate;
         Map<String, String> requestHeaders;
 
@@ -132,6 +146,11 @@ public class HttpEndpoint<REQ, RES> {
             return this;
         }
 
+        public Builder<REQ, RES> method(HttpMethod method) {
+            this.method = method;
+            return this;
+        }
+
         public Builder<REQ, RES> urlTemplate(ParametrizedString urlTemplate) {
             this.urlTemplate = urlTemplate;
             return this;
@@ -160,6 +179,7 @@ public class HttpEndpoint<REQ, RES> {
                     deserializer,
                     group,
                     name,
+                    method,
                     urlTemplate,
                     requestHeaders == null ? Map.of() : requestHeaders
             );

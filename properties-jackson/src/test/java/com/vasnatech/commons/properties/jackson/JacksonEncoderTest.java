@@ -112,13 +112,6 @@ public class JacksonEncoderTest {
     }
 
     @Test
-    void encodeToString() throws IOException {
-        String expected = Resources.asString(this, TEST_01_PROPERTIES);
-        String actual = encoder.encode(object, String.class);
-        assertThat(actual).isEqualTo(expected);
-    }
-
-    @Test
     void objectToString() throws IOException {
         String expected = Resources.asString(this, TEST_01_PROPERTIES);
         String actual = encoder.toString(object);

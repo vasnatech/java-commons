@@ -19,29 +19,37 @@ public class JdkSyncHttpClient<REQ, RES> extends JdkHttpClient<REQ, RES> impleme
         super(httpClient, endpoint);
     }
 
+
     @Override
-    public RES get(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+    public RES invoke(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+        return switch (endpoint.method) {
+            case GET -> get(parameters, requestHeaders);
+            case POST -> post(requestBody, parameters, requestHeaders);
+            case PUT -> put(requestBody, parameters, requestHeaders);
+            case DELETE -> delete(parameters, requestHeaders);
+            default -> throw new HttpClientException(0, "Unsupported http method " + endpoint.method);
+        };
+    }
+
+    RES get(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
         return response(request(parameters, requestHeaders).GET());
     }
 
-    @Override
-    public RES post(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
-        return response(
-                request(parameters, requestHeaders)
-                        .POST(BodyPublishers.ofInputStream(requestBodyInputStream(requestBody)))
-        );
+    RES post(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+        HttpRequest.BodyPublisher bodyPublisher = requestBody == null
+                ? BodyPublishers.noBody()
+                : BodyPublishers.ofInputStream(requestBodyInputStream(requestBody));
+        return response(request(parameters, requestHeaders).POST(bodyPublisher));
     }
 
-    @Override
-    public RES put(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
-        return response(
-                request(parameters, requestHeaders)
-                        .PUT(BodyPublishers.ofInputStream(requestBodyInputStream(requestBody)))
-        );
+    RES put(REQ requestBody, Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+        HttpRequest.BodyPublisher bodyPublisher = requestBody == null
+                ? BodyPublishers.noBody()
+                : BodyPublishers.ofInputStream(requestBodyInputStream(requestBody));
+        return response(request(parameters, requestHeaders).PUT(bodyPublisher));
     }
 
-    @Override
-    public RES delete(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
+    RES delete(Map<String, ?> parameters, Map<String, String> requestHeaders) throws HttpClientException {
         return response(request(parameters, requestHeaders).DELETE());
     }
 

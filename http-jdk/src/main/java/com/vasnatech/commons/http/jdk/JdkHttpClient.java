@@ -1,5 +1,6 @@
 package com.vasnatech.commons.http.jdk;
 
+import com.vasnatech.commons.http.HttpClient;
 import com.vasnatech.commons.http.HttpClientException;
 import com.vasnatech.commons.http.HttpEndpoint;
 
@@ -12,7 +13,7 @@ import java.net.http.HttpRequest;
 import java.util.Map;
 import java.util.function.Supplier;
 
-public abstract class JdkHttpClient<REQ, RES> {
+public abstract class JdkHttpClient<REQ, RES> implements HttpClient<REQ, RES> {
 
     final java.net.http.HttpClient httpClient;
     final HttpEndpoint<REQ, RES> endpoint;

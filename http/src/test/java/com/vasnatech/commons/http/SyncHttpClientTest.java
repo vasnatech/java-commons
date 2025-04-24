@@ -13,7 +13,11 @@ import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyMap;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 public class SyncHttpClientTest {
 
@@ -57,17 +61,17 @@ public class SyncHttpClientTest {
 
         SyncHttpClient<String, String> httpClient = mock(SyncHttpClient.class);
         when(httpClient.caller()).thenCallRealMethod();
-        when(httpClient.get(anyMap(), anyMap())).thenReturn(expectedResponse);
+        when(httpClient.invoke(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
 
         String actualResponse = httpClient.caller()
                 .parameters(parameters)
                 .requestHeaders(requestHeaders)
-                .get();
+                .invoke();
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
         ArgumentCaptor<Map<String, Object>> parametersCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<Map<String, String>> requestHeadersCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(httpClient).get(parametersCaptor.capture(), requestHeadersCaptor.capture());
+        verify(httpClient).invoke(eq(null), parametersCaptor.capture(), requestHeadersCaptor.capture());
         assertThat(parametersCaptor.getValue()).containsExactlyEntriesOf(parameters);
         assertThat(requestHeadersCaptor.getValue()).containsExactlyEntriesOf(requestHeaders);
     }
@@ -80,17 +84,17 @@ public class SyncHttpClientTest {
 
         SyncHttpClient<String, String> httpClient = mock(SyncHttpClient.class);
         when(httpClient.caller()).thenCallRealMethod();
-        when(httpClient.get(anyMap(), anyMap())).thenReturn(expectedResponse);
+        when(httpClient.invoke(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
 
         SyncHttpClient.SyncCaller<String, String> caller = httpClient.caller();
         parameters.forEach(Pair.toConsumer(caller::parameter));
         requestHeaders.forEach(Pair.toConsumer(caller::requestHeader));
-        String actualResponse = caller.get();
+        String actualResponse = caller.invoke();
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
         ArgumentCaptor<Map<String, Object>> parametersCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<Map<String, String>> requestHeadersCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(httpClient).get(parametersCaptor.capture(), requestHeadersCaptor.capture());
+        verify(httpClient).invoke(eq(null), parametersCaptor.capture(), requestHeadersCaptor.capture());
         assertThat(parametersCaptor.getValue()).contains(parameters.toArray(new Map.Entry[0]));
         assertThat(requestHeadersCaptor.getValue()).contains(requestHeaders.toArray(new Map.Entry[0]));
     }
@@ -104,19 +108,19 @@ public class SyncHttpClientTest {
 
         SyncHttpClient<String, String> httpClient = mock(SyncHttpClient.class);
         when(httpClient.caller()).thenCallRealMethod();
-        when(httpClient.post(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
+        when(httpClient.invoke(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
 
         String actualResponse = httpClient.caller()
                 .requestBody(requestBody)
                 .parameters(parameters)
                 .requestHeaders(requestHeaders)
-                .post();
+                .invoke();
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
         ArgumentCaptor<String> requestBodyCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<Map<String, Object>> parametersCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<Map<String, String>> requestHeadersCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(httpClient).post(requestBodyCaptor.capture(), parametersCaptor.capture(), requestHeadersCaptor.capture());
+        verify(httpClient).invoke(requestBodyCaptor.capture(), parametersCaptor.capture(), requestHeadersCaptor.capture());
         assertThat(requestBodyCaptor.getValue()).isEqualTo(requestBody);
         assertThat(parametersCaptor.getValue()).containsExactlyEntriesOf(parameters);
         assertThat(requestHeadersCaptor.getValue()).containsExactlyEntriesOf(requestHeaders);
@@ -131,19 +135,19 @@ public class SyncHttpClientTest {
 
         SyncHttpClient<String, String> httpClient = mock(SyncHttpClient.class);
         when(httpClient.caller()).thenCallRealMethod();
-        when(httpClient.put(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
+        when(httpClient.invoke(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
 
         String actualResponse = httpClient.caller()
                 .requestBody(requestBody)
                 .parameters(parameters)
                 .requestHeaders(requestHeaders)
-                .put();
+                .invoke();
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
         ArgumentCaptor<String> requestBodyCaptor = ArgumentCaptor.forClass(String.class);
         ArgumentCaptor<Map<String, Object>> parametersCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<Map<String, String>> requestHeadersCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(httpClient).put(requestBodyCaptor.capture(), parametersCaptor.capture(), requestHeadersCaptor.capture());
+        verify(httpClient).invoke(requestBodyCaptor.capture(), parametersCaptor.capture(), requestHeadersCaptor.capture());
         assertThat(requestBodyCaptor.getValue()).isEqualTo(requestBody);
         assertThat(parametersCaptor.getValue()).containsExactlyEntriesOf(parameters);
         assertThat(requestHeadersCaptor.getValue()).containsExactlyEntriesOf(requestHeaders);
@@ -157,17 +161,17 @@ public class SyncHttpClientTest {
 
         SyncHttpClient<String, String> httpClient = mock(SyncHttpClient.class);
         when(httpClient.caller()).thenCallRealMethod();
-        when(httpClient.delete(anyMap(), anyMap())).thenReturn(expectedResponse);
+        when(httpClient.invoke(any(), anyMap(), anyMap())).thenReturn(expectedResponse);
 
         String actualResponse = httpClient.caller()
                 .parameters(parameters)
                 .requestHeaders(requestHeaders)
-                .delete();
+                .invoke();
 
         assertThat(actualResponse).isEqualTo(expectedResponse);
         ArgumentCaptor<Map<String, Object>> parametersCaptor = ArgumentCaptor.forClass(Map.class);
         ArgumentCaptor<Map<String, String>> requestHeadersCaptor = ArgumentCaptor.forClass(Map.class);
-        verify(httpClient).delete(parametersCaptor.capture(), requestHeadersCaptor.capture());
+        verify(httpClient).invoke(eq(null), parametersCaptor.capture(), requestHeadersCaptor.capture());
         assertThat(parametersCaptor.getValue()).containsExactlyEntriesOf(parameters);
         assertThat(requestHeadersCaptor.getValue()).containsExactlyEntriesOf(requestHeaders);
     }

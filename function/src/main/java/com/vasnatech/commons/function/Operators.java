@@ -50,44 +50,44 @@ public class Operators {
     }
 
 
-    public static <T> Operator<T> unchecked(CheckedOperator<T> checked) {
+    public static <T, E extends Throwable> Operator<T> unchecked(CheckedOperator<T, E> checked) {
         return checked.unchecked();
     }
 
-    public static <T> BinaryOperator<T> unchecked(CheckedBiOperator<T> checked) {
+    public static <T, E extends Throwable> BinaryOperator<T> unchecked(CheckedBiOperator<T, E> checked) {
         return checked.unchecked();
     }
 
-    public static <T> TriOperator<T> unchecked(CheckedTriOperator<T> checked) {
+    public static <T, E extends Throwable> TriOperator<T> unchecked(CheckedTriOperator<T, E> checked) {
         return checked.unchecked();
     }
 
-    public static <T> TetraOperator<T> unchecked(CheckedTetraOperator<T> checked) {
+    public static <T, E extends Throwable> TetraOperator<T> unchecked(CheckedTetraOperator<T, E> checked) {
         return checked.unchecked();
     }
 
-    public static <T> PentaOperator<T> unchecked(CheckedPentaOperator<T> checked) {
+    public static <T, E extends Throwable> PentaOperator<T> unchecked(CheckedPentaOperator<T, E> checked) {
         return checked.unchecked();
     }
 
 
-    public static <T> CheckedOperator<T> checked(Operator<T> unchecked) {
+    public static <T, E extends Throwable> CheckedOperator<T, E> checked(Operator<T> unchecked) {
         return CheckedOperator.checked(unchecked);
     }
 
-    public static <T> CheckedBiOperator<T> checked(BinaryOperator<T> unchecked) {
+    public static <T, E extends Throwable> CheckedBiOperator<T, E> checked(BinaryOperator<T> unchecked) {
         return CheckedBiOperator.checked(unchecked);
     }
 
-    public static <T> CheckedTriOperator<T> checked(TriOperator<T> unchecked) {
+    public static <T, E extends Throwable> CheckedTriOperator<T, E> checked(TriOperator<T> unchecked) {
         return CheckedTriOperator.checked(unchecked);
     }
 
-    public static <T> CheckedTetraOperator<T> checked(TetraOperator<T> unchecked) {
+    public static <T, E extends Throwable> CheckedTetraOperator<T, E> checked(TetraOperator<T> unchecked) {
         return CheckedTetraOperator.checked(unchecked);
     }
 
-    public static <T> CheckedPentaOperator<T> checked(PentaOperator<T> unchecked) {
+    public static <T, E extends Throwable> CheckedPentaOperator<T, E> checked(PentaOperator<T> unchecked) {
         return CheckedPentaOperator.checked(unchecked);
     }
 }

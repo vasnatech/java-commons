@@ -6,7 +6,7 @@
 
     <groupId>com.vasnatech</groupId>
     <artifactId>commons</artifactId>
-    <version>0.2</version>
+    <version>0.3.0</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -30,8 +30,11 @@
         <module>resource</module>
         <module>schema</module>
         <module>serialize</module>
+        <module>serialize-jackson</module>
         <module>text</module>
         <module>type</module>
+        <module>yaml</module>
+        <module>yaml-jackson</module>
     </modules>
 
     <properties>

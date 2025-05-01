@@ -16,11 +16,11 @@ public class Runnables {
         return () -> { throw throwable; };
     }
 
-    public static Runnable unchecked(CheckedRunnable checked) {
+    public static <E extends Throwable> Runnable unchecked(CheckedRunnable<E> checked) {
         return checked.unchecked();
     }
 
-    public static CheckedRunnable checked(Runnable unchecked) {
+    public static <E extends Throwable> CheckedRunnable<E> checked(Runnable unchecked) {
         return CheckedRunnable.checked(unchecked);
     }
 }

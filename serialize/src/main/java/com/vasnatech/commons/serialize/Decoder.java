@@ -1,6 +1,4 @@
-package com.vasnatech.commons.json;
-
-import com.vasnatech.commons.serialize.Deserializer;
+package com.vasnatech.commons.serialize;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,19 +16,19 @@ public interface Decoder extends Deserializer {
     <T, R extends T> R fromReader(Reader reader, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
 
 
-    default Map<String, ?> fromByteArrayToMap(byte[] bytes) throws IOException {
+    default Map<String, Object> fromByteArrayToMap(byte[] bytes) throws IOException {
         return fromByteArray(bytes, Map.class, String.class, Object.class);
     }
 
-    default Map<String, ?> fromStringToMap(String jsonString) throws IOException {
+    default Map<String, Object> fromStringToMap(String jsonString) throws IOException {
         return fromString(jsonString, Map.class, String.class, Object.class);
     }
 
-    default Map<String, ?> fromInputStreamToMap(InputStream in) throws IOException {
+    default Map<String, Object> fromInputStreamToMap(InputStream in) throws IOException {
         return fromInputStream(in, Map.class, String.class, Object.class);
     }
 
-    default Map<String, ?> fromReaderToMap(Reader reader) throws IOException {
+    default Map<String, Object> fromReaderToMap(Reader reader) throws IOException {
         return fromReader(reader, Map.class, String.class, Object.class);
     }
 

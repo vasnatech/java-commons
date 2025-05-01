@@ -1,6 +1,4 @@
-package com.vasnatech.commons.json;
-
-import com.vasnatech.commons.serialize.Serializer;
+package com.vasnatech.commons.serialize;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -18,7 +16,7 @@ public interface Encoder extends Serializer {
         return encode(obj, String.class);
     }
 
-    default Map<String, ?> toMap(Object obj) throws IOException {
+    default Map<String, Object> toMap(Object obj) throws IOException {
         return encode(obj, Map.class, String.class, Object.class);
     }
 

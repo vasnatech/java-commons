@@ -4,7 +4,7 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface CheckedBiOperator<T> extends CheckedBiFunction<T, T, T> {
+public interface CheckedBiOperator<T, E extends Throwable> extends CheckedBiFunction<T, T, T, E> {
 
     @Override
     default BinaryOperator<T> unchecked() {
@@ -12,25 +12,32 @@ public interface CheckedBiOperator<T> extends CheckedBiFunction<T, T, T> {
     }
 
     @Override
-    default BinaryOperator<T> unchecked(Function<Exception, T> exceptionHandler) {
+    default BinaryOperator<T> unchecked(Function<E, T> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    static <T> CheckedBiOperator<T> checked(BinaryOperator<T> operator) {
+    static <T, E extends Throwable> CheckedBiOperator<T, E> checked(BinaryOperator<T> operator) {
         return operator::apply;
     }
 
-    static <T> BinaryOperator<T> unchecked(CheckedBiOperator<T> checked) {
+    static <T, E extends Throwable> BinaryOperator<T> unchecked(CheckedBiOperator<T, E> checked) {
         return unchecked(checked, ExceptionHandler.asFunction());
     }
 
-    static <T> BinaryOperator<T>  unchecked(CheckedBiOperator<T> checked, Function<Exception, T> exceptionHandler) {
-        return (first, second) -> {
-            try {
-                return checked.apply(first, second);
-            } catch (Exception e) {
-                return exceptionHandler.apply(e);
-            }
-        };
+    static <T, E extends Throwable> BinaryOperator<T>  unchecked(CheckedBiOperator<T, E> checked, Function<E, T> exceptionHandler) {
+        return (first, second) -> apply(first, second, checked, exceptionHandler);
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T, E extends Throwable> T apply(T first, T second, CheckedBiOperator<T, E> checked, Function<E, T> exceptionHandler) {
+        try {
+            return checked.apply(first, second);
+        } catch (Throwable e) {
+            return exceptionHandler.apply((E)e);
+        }
+    }
+
+    static <T, E extends Throwable> T apply(T first, T second, CheckedBiOperator<T, E> checked) {
+        return apply(first, second, checked, ExceptionHandler.asFunction());
     }
 }

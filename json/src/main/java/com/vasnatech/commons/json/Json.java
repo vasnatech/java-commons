@@ -1,5 +1,8 @@
 package com.vasnatech.commons.json;
 
+import com.vasnatech.commons.serialize.Decoder;
+import com.vasnatech.commons.serialize.Encoder;
+
 public final class Json {
 
     static Json json;

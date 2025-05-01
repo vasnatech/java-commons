@@ -8,14 +8,14 @@ import java.util.function.Consumer;
 
 public final class EventListeners {
 
-    final Consumer<RuntimeException> exceptionHandler;
+    final Consumer<Throwable> exceptionHandler;
     final ConcurrentHashMap<Class<?>, ConcurrentLinkedQueue<Listener<?>>> listenersGroupedByEventType;
 
     public EventListeners() {
         this(Throwable::printStackTrace);
     }
     
-    public EventListeners(Consumer<RuntimeException> exceptionHandler) {
+    public EventListeners(Consumer<Throwable> exceptionHandler) {
         this.exceptionHandler = exceptionHandler;
         this.listenersGroupedByEventType = new ConcurrentHashMap<>();
     }
@@ -35,7 +35,7 @@ public final class EventListeners {
     }
 
     @SuppressWarnings("unchecked")
-    synchronized <E, L extends Listener<E>> ConcurrentLinkedQueue<L> get(Class<E> eventType) {
+    public synchronized <E, L extends Listener<E>> ConcurrentLinkedQueue<L> get(Class<E> eventType) {
         Objects.requireNonNull(eventType);
         Class<?> clazz = eventType;
         while (clazz != null) {
@@ -69,13 +69,13 @@ public final class EventListeners {
     <E, L extends Listener<E>> void fire(E event, L listener) {
         try {
             listener.happened(event);
-        } catch (RuntimeException e) {
+        } catch (Throwable e) {
             try {
                 exceptionHandler.accept(e);
-            } catch (RuntimeException e1) {
+            } catch (Throwable e1) {
                 try {
                     exceptionHandler.accept(e1);
-                } catch (RuntimeException e2) {
+                } catch (Throwable e2) {
                     //DO NOTHING. Exception Handler failed.
                 }
             }

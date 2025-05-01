@@ -3,33 +3,35 @@ package com.vasnatech.commons.function;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface CheckedOperator<T> extends CheckedFunction<T, T> {
+public interface CheckedOperator<T, E extends Throwable> extends CheckedFunction<T, T, E> {
 
     @Override
     default Operator<T> unchecked() {
         return unchecked(this, ExceptionHandler.asFunction());
     }
 
-    @Override
-    default Operator<T> unchecked(Function<Exception, T> exceptionHandler) {
-        return unchecked(this, exceptionHandler);
-    }
-
-    static <T> CheckedOperator<T> checked(Operator<T> operator) {
+    static <T, E extends Throwable> CheckedOperator<T, E> checked(Operator<T> operator) {
         return operator::apply;
     }
 
-    static <T> Operator<T> unchecked(CheckedOperator<T> checked) {
+    static <T, E extends Throwable> Operator<T> unchecked(CheckedOperator<T, E> checked) {
         return unchecked(checked, ExceptionHandler.asFunction());
     }
 
-    static <T> Operator<T>  unchecked(CheckedOperator<T> checked, Function<Exception, T> exceptionHandler) {
-        return (first) -> {
-            try {
-                return checked.apply(first);
-            } catch (Exception e) {
-                return exceptionHandler.apply(e);
-            }
-        };
+    static <T, E extends Throwable> Operator<T> unchecked(CheckedOperator<T, E> checked, Function<E, T> exceptionHandler) {
+        return (t) -> apply(t, checked, exceptionHandler);
+    }
+
+    @SuppressWarnings("unchecked")
+    static <T, E extends Throwable> T apply(T t, CheckedOperator<T, E> checked, Function<E, T> exceptionHandler) {
+        try {
+            return checked.apply(t);
+        } catch (Throwable e) {
+            return exceptionHandler.apply((E)e);
+        }
+    }
+
+    static <T, E extends Throwable> T apply(T t, CheckedOperator<T, E> checked) {
+        return apply(t, checked, ExceptionHandler.asFunction());
     }
 }

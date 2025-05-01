@@ -6,7 +6,7 @@
     <parent>
         <groupId>com.vasnatech</groupId>
         <artifactId>commons</artifactId>
-        <version>0.2</version>
+        <version>0.3.0</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
@@ -23,9 +23,9 @@
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>${com.fasterxml.jackson.version}</version>
+            <groupId>com.vasnatech</groupId>
+            <artifactId>commons-serialize-jackson</artifactId>
+            <version>${project.version}</version>
         </dependency>
 
         <dependency>

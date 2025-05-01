@@ -117,44 +117,44 @@ public class Functions {
     }
 
 
-    public static <FIRST, R> Function<FIRST, R> unchecked(CheckedFunction<FIRST, R> checked) {
+    public static <FIRST, R, E extends Throwable> Function<FIRST, R> unchecked(CheckedFunction<FIRST, R, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, R> BiFunction<FIRST, SECOND, R> unchecked(CheckedBiFunction<FIRST, SECOND, R> checked) {
+    public static <FIRST, SECOND, R, E extends Throwable> BiFunction<FIRST, SECOND, R> unchecked(CheckedBiFunction<FIRST, SECOND, R, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD, R> TriFunction<FIRST, SECOND, THIRD, R> unchecked(CheckedTriFunction<FIRST, SECOND, THIRD, R> checked) {
+    public static <FIRST, SECOND, THIRD, R, E extends Throwable> TriFunction<FIRST, SECOND, THIRD, R> unchecked(CheckedTriFunction<FIRST, SECOND, THIRD, R, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, R> TetraFunction<FIRST, SECOND, THIRD, FOURTH, R> unchecked(CheckedTetraFunction<FIRST, SECOND, THIRD, FOURTH, R> checked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, R, E extends Throwable> TetraFunction<FIRST, SECOND, THIRD, FOURTH, R> unchecked(CheckedTetraFunction<FIRST, SECOND, THIRD, FOURTH, R, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, R> PentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R> unchecked(CheckedPentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R> checked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, R, E extends Throwable> PentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R> unchecked(CheckedPentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R, E> checked) {
         return checked.unchecked();
     }
 
 
-    public static <FIRST, R> CheckedFunction<FIRST, R> checked(Function<FIRST, R> unchecked) {
+    public static <FIRST, R, E extends Throwable> CheckedFunction<FIRST, R, E> checked(Function<FIRST, R> unchecked) {
         return CheckedFunction.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, R> CheckedBiFunction<FIRST, SECOND, R> checked(BiFunction<FIRST, SECOND, R> unchecked) {
+    public static <FIRST, SECOND, R, E extends Throwable> CheckedBiFunction<FIRST, SECOND, R, E> checked(BiFunction<FIRST, SECOND, R> unchecked) {
         return CheckedBiFunction.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, R> CheckedTriFunction<FIRST, SECOND, THIRD, R> checked(TriFunction<FIRST, SECOND, THIRD, R> unchecked) {
+    public static <FIRST, SECOND, THIRD, R, E extends Throwable> CheckedTriFunction<FIRST, SECOND, THIRD, R, E> checked(TriFunction<FIRST, SECOND, THIRD, R> unchecked) {
         return CheckedTriFunction.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, R> CheckedTetraFunction<FIRST, SECOND, THIRD, FOURTH, R> checked(TetraFunction<FIRST, SECOND, THIRD, FOURTH, R> unchecked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, R, E extends Throwable> CheckedTetraFunction<FIRST, SECOND, THIRD, FOURTH, R, E> checked(TetraFunction<FIRST, SECOND, THIRD, FOURTH, R> unchecked) {
         return CheckedTetraFunction.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, R> CheckedPentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R> checked(PentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R> unchecked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, R, E extends Throwable> CheckedPentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R, E> checked(PentaFunction<FIRST, SECOND, THIRD, FOURTH, FIFTH, R> unchecked) {
         return CheckedPentaFunction.checked(unchecked);
     }
 }

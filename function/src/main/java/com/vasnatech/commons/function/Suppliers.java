@@ -12,11 +12,11 @@ public class Suppliers {
         return supplier;
     }
 
-    public static <T> Supplier<T> unchecked(CheckedSupplier<T> checked) {
+    public static <T, E extends Throwable> Supplier<T> unchecked(CheckedSupplier<T, E> checked) {
         return checked.unchecked();
     }
 
-    public static <T> CheckedSupplier<T> checked(Supplier<T> unchecked) {
+    public static <T, E extends Throwable> CheckedSupplier<T, E> checked(Supplier<T> unchecked) {
         return CheckedSupplier.checked(unchecked);
     }
 }

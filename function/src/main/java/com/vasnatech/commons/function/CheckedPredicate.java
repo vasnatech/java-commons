@@ -4,65 +4,73 @@ import java.util.Objects;
 import java.util.function.Predicate;
 
 @FunctionalInterface
-public interface CheckedPredicate<FIRST> {
+public interface CheckedPredicate<FIRST, E extends Throwable> {
 
-    boolean test(FIRST first) throws Exception;
+    boolean test(FIRST first) throws E;
 
     default Predicate<FIRST> unchecked() {
         return unchecked(this, ExceptionHandler.asPredicate());
     }
 
-    default Predicate<FIRST> unchecked(Predicate<Exception> exceptionHandler) {
+    default Predicate<FIRST> unchecked(Predicate<E> exceptionHandler) {
         return unchecked(this, exceptionHandler);
     }
 
-    default CheckedPredicate<FIRST> and(CheckedPredicate<? super FIRST> checked) {
+    default CheckedPredicate<FIRST, E> and(CheckedPredicate<? super FIRST, ? extends E> checked) {
         Objects.requireNonNull(checked);
         return first -> test(first) && checked.test(first);
     }
 
-    default CheckedPredicate<FIRST> and(Predicate<? super FIRST> unchecked) {
+    default CheckedPredicate<FIRST, E> and(Predicate<? super FIRST> unchecked) {
         Objects.requireNonNull(unchecked);
         return first -> test(first) && unchecked.test(first);
     }
 
-    default CheckedPredicate<FIRST> negate() {
+    default CheckedPredicate<FIRST, E> negate() {
         return first -> !test(first);
     }
 
-    default CheckedPredicate<FIRST> or(CheckedPredicate<? super FIRST> checked) {
+    default CheckedPredicate<FIRST, E> or(CheckedPredicate<? super FIRST, ? extends E> checked) {
         Objects.requireNonNull(checked);
         return first -> test(first) || checked.test(first);
     }
 
-    default CheckedPredicate<FIRST> or(Predicate<? super FIRST> unchecked) {
+    default CheckedPredicate<FIRST, E> or(Predicate<? super FIRST> unchecked) {
         Objects.requireNonNull(unchecked);
         return first -> test(first) || unchecked.test(first);
     }
 
 
-    static <FIRST> CheckedPredicate<FIRST> checked(Predicate<FIRST> unchecked) {
+    static <FIRST, E extends Throwable> CheckedPredicate<FIRST, E> checked(Predicate<FIRST> unchecked) {
         return unchecked::test;
     }
-    static <FIRST> Predicate<FIRST> unchecked(CheckedPredicate<FIRST> checked) {
+
+    static <FIRST, E extends Throwable> Predicate<FIRST> unchecked(CheckedPredicate<FIRST, E> checked) {
         return unchecked(checked, ExceptionHandler.asPredicate());
     }
 
-    static <FIRST> Predicate<FIRST> unchecked(CheckedPredicate<FIRST> checked, Predicate<Exception> exceptionHandler) {
-        return first -> {
-            try {
-                return checked.test(first);
-            } catch (Exception e) {
-                return exceptionHandler.test(e);
-            }
-        };
+    static <FIRST, E extends Throwable> Predicate<FIRST> unchecked(CheckedPredicate<FIRST, E> checked, Predicate<E> exceptionHandler) {
+        return first -> test(first, checked, exceptionHandler);
     }
 
-    static <FIRST> CheckedPredicate<FIRST> isEqual(Object targetRef) {
+    @SuppressWarnings("unchecked")
+    static <FIRST, E extends Throwable> boolean test(FIRST first, CheckedPredicate<FIRST, E> checked, Predicate<E> exceptionHandler) {
+        try {
+            return checked.test(first);
+        } catch (Throwable e) {
+            return exceptionHandler.test((E)e);
+        }
+    }
+
+    static <FIRST, E extends Throwable> boolean test(FIRST first, CheckedPredicate<FIRST, E> checked) {
+        return test(first, checked, ExceptionHandler.asPredicate());
+    }
+
+    static <FIRST, E extends Throwable> CheckedPredicate<FIRST, E> isEqual(Object targetRef) {
         return targetRef == null ? Objects::isNull : targetRef::equals;
     }
 
-    static <FIRST> CheckedPredicate<FIRST> negate(CheckedPredicate<? super FIRST> checked) {
+    static <FIRST, E extends Throwable> CheckedPredicate<FIRST, E> negate(CheckedPredicate<? super FIRST, ? extends E> checked) {
         Objects.requireNonNull(checked);
         return t -> !checked.test(t);
     }

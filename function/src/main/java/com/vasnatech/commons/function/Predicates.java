@@ -90,43 +90,44 @@ public class Predicates {
     }
 
 
-    public static <FIRST> Predicate<FIRST> unchecked(CheckedPredicate<FIRST> checked) {
+    public static <FIRST, E extends Throwable> Predicate<FIRST> unchecked(CheckedPredicate<FIRST, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST> CheckedPredicate<FIRST> checked(Predicate<FIRST> unchecked) {
+    public static <FIRST, SECOND, E extends Throwable> BiPredicate<FIRST, SECOND> unchecked(CheckedBiPredicate<FIRST, SECOND, E> checked) {
+        return checked.unchecked();
+    }
+
+    public static <FIRST, SECOND, THIRD, E extends Throwable> TriPredicate<FIRST, SECOND, THIRD> unchecked(CheckedTriPredicate<FIRST, SECOND, THIRD, E> checked) {
+        return checked.unchecked();
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH, E extends Throwable> TetraPredicate<FIRST, SECOND, THIRD, FOURTH> unchecked(CheckedTetraPredicate<FIRST, SECOND, THIRD, FOURTH, E> checked) {
+        return checked.unchecked();
+    }
+
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, E extends Throwable> PentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked(CheckedPentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH, E> checked) {
+        return checked.unchecked();
+    }
+
+
+    public static <FIRST, E extends Throwable> CheckedPredicate<FIRST, E> checked(Predicate<FIRST> unchecked) {
         return CheckedPredicate.checked(unchecked);
     }
 
-    public static <FIRST, SECOND> BiPredicate<FIRST, SECOND> unchecked(CheckedBiPredicate<FIRST, SECOND> checked) {
-        return checked.unchecked();
-    }
-
-    public static <FIRST, SECOND> CheckedBiPredicate<FIRST, SECOND> checked(BiPredicate<FIRST, SECOND> unchecked) {
+    public static <FIRST, SECOND, E extends Throwable> CheckedBiPredicate<FIRST, SECOND, E> checked(BiPredicate<FIRST, SECOND> unchecked) {
         return CheckedBiPredicate.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD> TriPredicate<FIRST, SECOND, THIRD> unchecked(CheckedTriPredicate<FIRST, SECOND, THIRD> checked) {
-        return checked.unchecked();
-    }
-
-    public static <FIRST, SECOND, THIRD> CheckedTriPredicate<FIRST, SECOND, THIRD> checked(TriPredicate<FIRST, SECOND, THIRD> unchecked) {
+    public static <FIRST, SECOND, THIRD, E extends Throwable> CheckedTriPredicate<FIRST, SECOND, THIRD, E> checked(TriPredicate<FIRST, SECOND, THIRD> unchecked) {
         return CheckedTriPredicate.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH> TetraPredicate<FIRST, SECOND, THIRD, FOURTH> unchecked(CheckedTetraPredicate<FIRST, SECOND, THIRD, FOURTH> checked) {
-        return checked.unchecked();
-    }
-
-    public static <FIRST, SECOND, THIRD, FOURTH> CheckedTetraPredicate<FIRST, SECOND, THIRD, FOURTH> checked(TetraPredicate<FIRST, SECOND, THIRD, FOURTH> unchecked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, E extends Throwable> CheckedTetraPredicate<FIRST, SECOND, THIRD, FOURTH, E> checked(TetraPredicate<FIRST, SECOND, THIRD, FOURTH> unchecked) {
         return CheckedTetraPredicate.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> PentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked(CheckedPentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH> checked) {
-        return checked.unchecked();
-    }
-
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> CheckedPentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH> checked(PentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, E extends Throwable> CheckedPentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH, E> checked(PentaPredicate<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked) {
         return CheckedPentaPredicate.checked(unchecked);
     }
 }

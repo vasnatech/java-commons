@@ -84,18 +84,18 @@ public final class Consumers {
     }
 
 
-    public static <FIRST> CheckedConsumer<FIRST> of(CheckedConsumer<FIRST> consumer) {
+    public static <FIRST, E extends Throwable> CheckedConsumer<FIRST, E> of(CheckedConsumer<FIRST, E> consumer) {
         return consumer;
     }
 
-    public static <FIRST, SECOND> CheckedBiConsumer<FIRST, SECOND> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer) {
+    public static <FIRST, SECOND, E extends Throwable> CheckedBiConsumer<FIRST, SECOND, E> of(CheckedConsumer<? super FIRST, ? extends E> firstConsumer, CheckedConsumer<? super SECOND, ? extends E> secondConsumer) {
         return (first, second) -> {
             firstConsumer.accept(first);
             secondConsumer.accept(second);
         };
     }
 
-    public static <FIRST, SECOND, THIRD> CheckedTriConsumer<FIRST, SECOND, THIRD> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer, CheckedConsumer<? super THIRD> thirdConsumer) {
+    public static <FIRST, SECOND, THIRD, E extends Throwable> CheckedTriConsumer<FIRST, SECOND, THIRD, E> of(CheckedConsumer<? super FIRST, ? extends E> firstConsumer, CheckedConsumer<? super SECOND, ? extends E> secondConsumer, CheckedConsumer<? super THIRD, ? extends E> thirdConsumer) {
         return (first, second, third) -> {
             firstConsumer.accept(first);
             secondConsumer.accept(second);
@@ -103,7 +103,7 @@ public final class Consumers {
         };
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer, CheckedConsumer<? super THIRD> thirdConsumer, CheckedConsumer<? super FOURTH> fourthConsumer) {
+    public static <FIRST, SECOND, THIRD, FOURTH, E extends Throwable> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH, E> of(CheckedConsumer<? super FIRST, ? extends E> firstConsumer, CheckedConsumer<? super SECOND, ? extends E> secondConsumer, CheckedConsumer<? super THIRD, ? extends E> thirdConsumer, CheckedConsumer<? super FOURTH, ? extends E> fourthConsumer) {
         return (first, second, third, fourth) -> {
             firstConsumer.accept(first);
             secondConsumer.accept(second);
@@ -112,7 +112,7 @@ public final class Consumers {
         };
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> of(CheckedConsumer<? super FIRST> firstConsumer, CheckedConsumer<? super SECOND> secondConsumer, CheckedConsumer<? super THIRD> thirdConsumer, CheckedConsumer<? super FOURTH> fourthConsumer, CheckedConsumer<? super FIFTH> fifthConsumer) {
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, E extends Throwable> CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH, E> of(CheckedConsumer<? super FIRST, ? extends E> firstConsumer, CheckedConsumer<? super SECOND, ? extends E> secondConsumer, CheckedConsumer<? super THIRD, ? extends E> thirdConsumer, CheckedConsumer<? super FOURTH, ? extends E> fourthConsumer, CheckedConsumer<? super FIFTH, ? extends E> fifthConsumer) {
         return (first, second, third, fourth, fifth) -> {
             firstConsumer.accept(first);
             secondConsumer.accept(second);
@@ -123,45 +123,45 @@ public final class Consumers {
     }
 
 
-    public static <FIRST> Consumer<FIRST> unchecked(CheckedConsumer<FIRST> checkedConsumer) {
+    public static <FIRST, E extends Throwable> Consumer<FIRST> unchecked(CheckedConsumer<FIRST, E> checkedConsumer) {
         return checkedConsumer.unchecked();
     }
 
-    public static <FIRST, SECOND> BiConsumer<FIRST, SECOND> unchecked(CheckedBiConsumer<FIRST, SECOND> checked) {
+    public static <FIRST, SECOND, E extends Throwable> BiConsumer<FIRST, SECOND> unchecked(CheckedBiConsumer<FIRST, SECOND, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD> TriConsumer<FIRST, SECOND, THIRD> unchecked(CheckedTriConsumer<FIRST, SECOND, THIRD> checked) {
+    public static <FIRST, SECOND, THIRD, E extends Throwable> TriConsumer<FIRST, SECOND, THIRD> unchecked(CheckedTriConsumer<FIRST, SECOND, THIRD, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH> TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked(CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> checked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, E extends Throwable> TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked(CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH, E> checked) {
         return checked.unchecked();
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked(CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> checked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, E extends Throwable> PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked(CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH, E> checked) {
         return checked.unchecked();
     }
 
 
 
-    public static <FIRST> CheckedConsumer<FIRST> checked(Consumer<FIRST> unchecked) {
+    public static <FIRST, E extends Throwable> CheckedConsumer<FIRST, E> checked(Consumer<FIRST> unchecked) {
         return CheckedConsumer.checked(unchecked);
     }
 
-    public static <FIRST, SECOND> CheckedBiConsumer<FIRST, SECOND> checked(BiConsumer<FIRST, SECOND> unchecked) {
+    public static <FIRST, SECOND, E extends Throwable> CheckedBiConsumer<FIRST, SECOND, E> checked(BiConsumer<FIRST, SECOND> unchecked) {
         return CheckedBiConsumer.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD> CheckedTriConsumer<FIRST, SECOND, THIRD> checked(TriConsumer<FIRST, SECOND, THIRD> unchecked) {
+    public static <FIRST, SECOND, THIRD, E extends Throwable> CheckedTriConsumer<FIRST, SECOND, THIRD, E> checked(TriConsumer<FIRST, SECOND, THIRD> unchecked) {
         return CheckedTriConsumer.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH> checked(TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, E extends Throwable> CheckedTetraConsumer<FIRST, SECOND, THIRD, FOURTH, E> checked(TetraConsumer<FIRST, SECOND, THIRD, FOURTH> unchecked) {
         return CheckedTetraConsumer.checked(unchecked);
     }
 
-    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH> CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> checked(PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked) {
+    public static <FIRST, SECOND, THIRD, FOURTH, FIFTH, E extends Throwable> CheckedPentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH, E> checked(PentaConsumer<FIRST, SECOND, THIRD, FOURTH, FIFTH> unchecked) {
         return CheckedPentaConsumer.checked(unchecked);
     }
 }

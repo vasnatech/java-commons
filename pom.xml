@@ -19,6 +19,7 @@
         <module>function</module>
         <module>http</module>
         <module>http-jdk</module>
+        <module>inject</module>
         <module>json</module>
         <module>json-jackson</module>
         <module>primitive</module>

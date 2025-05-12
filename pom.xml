@@ -22,6 +22,7 @@
         <module>inject</module>
         <module>json</module>
         <module>json-jackson</module>
+        <module>mapper</module>
         <module>primitive</module>
         <module>properties</module>
         <module>properties-jackson</module>

@@ -1,6 +1,8 @@
 package com.vasnatech.commons.properties.jackson;
 
+import com.vasnatech.commons.properties.Properties;
 import com.vasnatech.commons.resource.Resources;
+import com.vasnatech.commons.serialize.Encoder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -15,13 +17,14 @@ public class JacksonEncoderTest {
 
     static final String TEST_01_PROPERTIES = "test01.properties";
 
-    static JacksonEncoder encoder;
+    static Encoder encoder;
     static TestModel object;
     static Map<String, Object> map;
 
     @BeforeAll
     static void beforeAll() {
-        encoder = new JacksonEncoder();
+        PropertiesJackson.init();
+        encoder = Properties.encoder();
 
         object = new TestModel(
                 true,
@@ -106,7 +109,7 @@ public class JacksonEncoderTest {
     }
 
     @Test
-    void encodeToMap() {
+    void encodeToMap() throws IOException {
         Map<String, Object> actual = encoder.encode(object, Map.class, String.class, Object.class);
         assertThat(actual).containsExactlyInAnyOrderEntriesOf(map);
     }

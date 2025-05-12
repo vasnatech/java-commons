@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 
-public interface JsonResources {
+public interface PropertiesResources {
 
     static Map<String, ?> asMap(Object relativeTo, String name) throws IOException {
         return Properties.decoder().fromInputStreamToMap(Resources.asInputStream(relativeTo, name));

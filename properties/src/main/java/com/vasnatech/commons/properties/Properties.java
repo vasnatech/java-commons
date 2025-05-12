@@ -1,5 +1,8 @@
 package com.vasnatech.commons.properties;
 
+import com.vasnatech.commons.serialize.Decoder;
+import com.vasnatech.commons.serialize.Encoder;
+
 public final class Properties {
 
     static Properties properties;

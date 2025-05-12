@@ -4,12 +4,7 @@ import com.google.common.reflect.ClassPath;
 import com.vasnatech.commons.function.CachedSupplier;
 import com.vasnatech.commons.function.CheckedFunction;
 import com.vasnatech.commons.function.CheckedSupplier;
-import com.vasnatech.commons.mapper.MapperContext;
-import com.vasnatech.commons.mapper.MapperContexts;
-import com.vasnatech.commons.resource.Resources;
-import com.vasnatech.commons.yaml.Yaml;
 
-import java.io.InputStream;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
@@ -30,40 +25,11 @@ public class BeanContext {
         return INSTANCE;
     }
 
-    public static <T> T $P(String path, Class<T> clazz) {
-        return INSTANCE.getProperty(path, clazz);
-    }
-
-    @SafeVarargs
-    public static <T> T $P(String path, T... reified) {
-        return INSTANCE.getProperty(path, reified);
-    }
-
-    public static <T> T $B(Class<T> clazz) {
-        return INSTANCE.getBean(clazz);
-    }
-
-    @SafeVarargs
-    public static <T> T $B(String name, T... reified) {
-        return INSTANCE.getBean(name, reified);
-    }
-
-    @SafeVarargs
-    public static <T> T $B(T... reified) {
-        return INSTANCE.getBean(reified);
-    }
-
     public static void init(String packageName) {
-        init(packageName, MapperContexts.compound(MapperContexts.javaPrimitive(), MapperContexts.javaTime()));
-    }
-
-    public static void init(String packageName, MapperContext mapperContext) {
         if (INSTANCE != null) return;
 
-        InputStream in = Resources.asInputStream("application.yaml");
-        Map<String, ?> properties = in == null ? Map.of() : CheckedSupplier.get(() -> Yaml.decoder().fromInputStream(in, Map.class, String.class, Object.class));
         Map<String, Supplier<?>> beans = new HashMap<>();
-        INSTANCE = new BeanContext(mapperContext, properties, beans);
+        INSTANCE = new BeanContext(beans);
 
         Set<Class<?>> allClasses = findAllClasses(packageName);
 
@@ -171,7 +137,7 @@ public class BeanContext {
     static Object getParameter(Parameter parameter) {
         Property property = parameter.getAnnotation(Property.class);
         if (property != null) {
-            return getBeanContext().getProperty(property.value(), parameter.getType());
+            return PropertyContext.getPropertyContext().getProperty(property.value(), parameter.getType());
         }
         Bean bean = parameter.getAnnotation(Bean.class);
         if (bean != null) {
@@ -189,48 +155,10 @@ public class BeanContext {
     }
 
 
-    Map<String, ?> properties;
     Map<String, Supplier<?>> beans;
-    MapperContext mapperContext;
 
-    BeanContext(MapperContext mapperContext, Map<String, ?> properties, Map<String, Supplier<?>> beans) {
-        this.mapperContext = mapperContext;
-        this.properties = properties;
+    BeanContext(Map<String, Supplier<?>> beans) {
         this.beans = beans;
-    }
-
-    private Object getProperty(String path) {
-        if (path == null) return null;
-        String[] keys = path.split("\\.");
-        Object current = properties;
-        for (String key : keys) {
-            if (current == null) {
-                return null;
-            }
-            if (current instanceof Map<?,?> map) {
-                current = map.get(key);
-            } else {
-                return null;
-            }
-        }
-        return current;
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getProperty(String path, Class<T> clazz) {
-        Object value = getProperty(path);
-        if (value == null) {
-            return null;
-        }
-        if (clazz.isInstance(value)) {
-            return clazz.cast(value);
-        }
-        return mapperContext.map(value);
-    }
-
-    @SafeVarargs
-    public final <T> T getProperty(String path, T... reified) {
-        return getProperty(path, getClassOf(reified));
     }
 
     public <T> T getBean(Class<T> clazz) {

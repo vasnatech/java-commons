@@ -1,6 +1,8 @@
 package com.vasnatech.commons.properties.jackson;
 
+import com.vasnatech.commons.properties.Properties;
 import com.vasnatech.commons.resource.Resources;
+import com.vasnatech.commons.serialize.Decoder;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -17,13 +19,14 @@ public class JacksonDecoderTest {
 
     static final String TEST_01_PROPERTIES = "test01.properties";
 
-    static JacksonDecoder decoder;
+    static Decoder decoder;
     static TestModel expectedObject;
     static Map<String, Object> expectedMap;
 
     @BeforeAll
     static void beforeAll() {
-        decoder = new JacksonDecoder();
+        PropertiesJackson.init();
+        decoder = Properties.decoder();
 
         expectedObject = new TestModel(
                 true,

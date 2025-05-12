@@ -20,12 +20,17 @@
     <dependencies>
         <dependency>
             <groupId>com.vasnatech</groupId>
-            <artifactId>commons-function</artifactId>
+            <artifactId>commons-mapper</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vasnatech</groupId>
-            <artifactId>commons-mapper</artifactId>
+            <artifactId>commons-json-jackson</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vasnatech</groupId>
+            <artifactId>commons-properties-jackson</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>

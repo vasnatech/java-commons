@@ -7,9 +7,11 @@ import java.util.Map;
 
 public interface Decoder extends Deserializer {
 
+    <T, R extends T> R decode(Object obj, Class<T> rawClass, Class<?>... parameterClasses) throws IOException;
+
     <T, R extends T> R fromByteArray(byte[] bytes, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
 
-    <T, R extends T> R fromString(String jsonString, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
+    <T, R extends T> R fromString(String string, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
 
     <T, R extends T> R fromInputStream(InputStream in, Class<T> parametrized, Class<?>... parameterClasses) throws IOException;
 
@@ -20,8 +22,8 @@ public interface Decoder extends Deserializer {
         return fromByteArray(bytes, Map.class, String.class, Object.class);
     }
 
-    default Map<String, Object> fromStringToMap(String jsonString) throws IOException {
-        return fromString(jsonString, Map.class, String.class, Object.class);
+    default Map<String, Object> fromStringToMap(String string) throws IOException {
+        return fromString(string, Map.class, String.class, Object.class);
     }
 
     default Map<String, Object> fromInputStreamToMap(InputStream in) throws IOException {

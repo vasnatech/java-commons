@@ -25,11 +25,23 @@ public interface MapperContext {
         if (source == null) {
             return null;
         }
+        if (sourceClass.equals(targetClass)) {
+            return targetClass.cast(source);
+        }
         return Optional.of(sourceClass)
                 .map(this::source)
                 .map(sourceMapper -> sourceMapper.target(targetClass))
                 .map(mapper -> mapper.map(source))
                 .orElseThrow(() -> new IllegalArgumentException("Unable to map from " + sourceClass + " to " + targetClass));
+    }
+
+    @SuppressWarnings("unchecked")
+    default <S, T> T map(S source, Class<T> targetClass) {
+        if (source == null) {
+            return null;
+        }
+        Class<S> sourceClass = (Class<S>) source.getClass();
+        return map(sourceClass, source, targetClass);
     }
 
     @SuppressWarnings("unchecked")

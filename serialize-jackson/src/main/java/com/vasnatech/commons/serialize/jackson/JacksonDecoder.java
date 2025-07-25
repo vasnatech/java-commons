@@ -8,6 +8,11 @@ import java.io.Reader;
 
 public interface JacksonDecoder extends Jackson, Decoder {
 
+    @Override
+    default <T, R extends T> R decode(Object obj, Class<T> rawClass, Class<?>... parameterClasses) {
+        return getObjectMapper().convertValue(obj, toJavaType(rawClass, parameterClasses));
+    }
+
     default  <T, R extends T> R fromByteArray(byte[] bytes, Class<T> rawClass, Class<?>... parameterClasses) throws IOException {
         return getObjectMapper().readValue(bytes, toJavaType(rawClass, parameterClasses));
     }

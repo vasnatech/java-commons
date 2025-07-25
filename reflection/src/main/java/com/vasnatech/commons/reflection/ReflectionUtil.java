@@ -244,4 +244,10 @@ public final class ReflectionUtil {
     public static ClassLoader createClassLoader(String... classPaths) throws IOException {
         return createClassLoader(Stream.of(classPaths).collect(Collectors.toSet()));
     }
+
+    @SuppressWarnings("unchecked")
+    @SafeVarargs
+    public static <T> Class<T> getClassOf(T... reified) {
+        return (Class<T>) reified.getClass().getComponentType();
+    }
 }

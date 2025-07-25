@@ -1,20 +1,25 @@
 package com.vasnatech.commons.random;
 
+import java.security.SecureRandom;
 import java.util.Random;
 
 public class Randoms {
 
-    static final Random RANDOM = new Random();
+    static final Random RANDOM = new SecureRandom();
+
+    static byte[] randomBytes(int size) {
+        int normalizedSize = Math.min(Math.max(0, size), 128);
+        byte[] randomBytes = new byte[normalizedSize];
+        RANDOM.nextBytes(randomBytes);
+        return randomBytes;
+    }
 
     public static String hex() {
         return hex(16);
     }
 
     public static String hex(int size) {
-        int normalizedSize = Math.min(Math.max(0, size), 128);
-        byte[] randomBytes = new byte[normalizedSize];
-        RANDOM.nextBytes(randomBytes);
-        return toHexString(randomBytes);
+        return toHexString(randomBytes(size));
     }
 
     static final  int HIGH_DIGIT_MASK = 0xF0;

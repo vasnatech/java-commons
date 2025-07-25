@@ -8,12 +8,13 @@ import com.fasterxml.jackson.dataformat.javaprop.JavaPropsMapper;
 import com.vasnatech.commons.properties.Properties;
 import com.vasnatech.commons.serialize.Decoder;
 import com.vasnatech.commons.serialize.Encoder;
+import com.vasnatech.commons.serialize.jackson.Jackson;
 import com.vasnatech.commons.serialize.jackson.JacksonDecoder;
 import com.vasnatech.commons.serialize.jackson.JacksonEncoder;
 
 import java.util.Map;
 
-public class PropertiesJackson {
+public class PropertiesJackson implements Jackson {
 
     static final TypeReference<Map<String, ?>> TYPE_MAP = new TypeReference<>() {};
 

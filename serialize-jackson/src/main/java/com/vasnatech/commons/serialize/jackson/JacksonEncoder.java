@@ -12,11 +12,17 @@ public interface JacksonEncoder extends Jackson, Encoder {
         return getObjectMapper().convertValue(obj, toJavaType(rawClass, parameterClasses));
     }
 
+    @Override
+    default byte[] toByteArray(Object obj) throws IOException {
+        return getObjectMapper().writeValueAsBytes(obj);
+    }
+
+    @Override
     default String toString(Object obj) throws IOException {
         return getObjectMapper().writeValueAsString(obj);
     }
 
-    default Map<String, ?> toMap(String jsonString) throws IOException {
+    default Map<String, Object> toMap(String jsonString) throws IOException {
         return getObjectMapper().readValue(jsonString, TYPE_MAP);
     }
 

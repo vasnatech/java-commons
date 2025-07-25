@@ -9,10 +9,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
+import java.util.Optional;
+import java.util.SequencedSet;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -25,42 +25,41 @@ public class BeanContext {
         return INSTANCE;
     }
 
-    public static void init(String packageName) {
+    public static void init(SequencedSet<String> packageNames) {
         if (INSTANCE != null) return;
 
         Map<String, Supplier<?>> beans = new HashMap<>();
         INSTANCE = new BeanContext(beans);
 
-        Set<Class<?>> allClasses = findAllClasses(packageName);
+        SequencedSet<Class<?>> allClasses = packageNames.stream()
+                .map(BeanContext::findClasses)
+                .flatMap(SequencedSet::stream)
+                .collect(Collectors.toCollection(LinkedHashSet::new));
 
-        Set<Class<?>> configClasses = new HashSet<>();
-        Set<Class<?>> componentClasses = new HashSet<>();
+        SequencedSet<Class<?>> configClasses = new LinkedHashSet<>();
+        SequencedSet<Class<?>> componentClasses = new LinkedHashSet<>();
         findAspects(allClasses, configClasses, componentClasses);
 
         for (Class<?> clazz : componentClasses) {
             Component componentAnnotation = clazz.getAnnotation(Component.class);
-            String componentName = componentAnnotation.value();
-            Supplier<Object> componentSupplier = toCachedSupplier(() -> createFromConstructor(getInjectConstructor(clazz)));
-            if (componentName != null && !componentName.isEmpty()) {
-                beans.put(componentName, componentSupplier);
-            }
+            Supplier<Object> componentSupplier = toCachedSupplier(() -> createFromConstructor(getInjectConstructor(clazz), true));
+            Stream.of(componentAnnotation.value()).forEach(componentName -> beans.put(componentName, componentSupplier));
             beans.put(clazz.getName(), componentSupplier);
         }
 
         for (Class<?> clazz : configClasses) {
-            Supplier<Object> configSupplier = toCachedSupplier(() -> createFromConstructor(getInjectConstructor(clazz)));
+            Supplier<Object> configSupplier = toCachedSupplier(() -> createFromConstructor(getInjectConstructor(clazz), true));
             String configName = clazz.getName();
             beans.put(configName, configSupplier);
 
             for (Method method : clazz.getDeclaredMethods()) {
                 Component componentAnnotation = method.getAnnotation(Component.class);
                 if (componentAnnotation != null) {
-                    String componentName = componentAnnotation.value();
                     Supplier<Object> componentSupplier = toCachedSupplier(() -> createFromMethod(clazz, method));
-                    if (componentName == null || componentName.isEmpty()) {
+                    if (componentAnnotation.value().length == 0) {
                         beans.put(method.getName(), componentSupplier);
                     } else {
-                        beans.put(componentName, componentSupplier);
+                        Stream.of(componentAnnotation.value()).forEach(componentName -> beans.put(componentName, componentSupplier));
                     }
                     beans.put(method.getReturnType().getName(), componentSupplier);
                 }
@@ -72,7 +71,7 @@ public class BeanContext {
         return CachedSupplier.of(CheckedSupplier.unchecked(checkedSupplier));
     }
 
-    static Set<Class<?>> findAllClasses(String packageName) {
+    static SequencedSet<Class<?>> findClasses(String packageName) {
         return CheckedSupplier.get(() -> ClassPath.from(BeanContext.class.getClassLoader()))
                 .getTopLevelClassesRecursive(packageName)
                 .stream()
@@ -81,7 +80,7 @@ public class BeanContext {
                 .collect(Collectors.toCollection(LinkedHashSet::new));
     }
 
-    static void findAspects(Set<Class<?>> allClasses, Set<Class<?>> configs, Set<Class<?>> components) {
+    static void findAspects(SequencedSet<Class<?>> allClasses, SequencedSet<Class<?>> configs, SequencedSet<Class<?>> components) {
         for (Class<?> clazz : allClasses) {
             if (clazz.isAnnotationPresent(Config.class)) {
                 configs.add(clazz);
@@ -120,18 +119,23 @@ public class BeanContext {
         return injectConstructor;
     }
 
-    static Object createFromConstructor(Constructor<?> constructor) throws Exception {
+    static Object createFromConstructor(Constructor<?> constructor, boolean injectFields) throws Exception {
         Object[] parameters = Stream.of(constructor.getParameters())
                 .map(BeanContext::getParameter)
                 .toArray(Object[]::new);
-        return constructor.newInstance(parameters);
+        Object object = constructor.newInstance(parameters);
+        if (injectFields) {
+            InjectContext.injectFields(object);
+        }
+        return object;
     }
 
     static Object createFromMethod(Class<?> configClass, Method method) throws Exception {
         Object[] parameters = Stream.of(method.getParameters())
                 .map(BeanContext::getParameter)
                 .toArray(Object[]::new);
-        return method.invoke(getBeanContext().getBean(configClass), parameters);
+        Object object = method.invoke(getBeanContext().getBean(configClass), parameters);
+        return object;
     }
 
     static Object getParameter(Parameter parameter) {
@@ -161,12 +165,15 @@ public class BeanContext {
         this.beans = beans;
     }
 
-    public <T> T getBean(Class<T> clazz) {
-        return getBean(clazz.getName(), clazz);
+    public <T> T getBean(String name, Class<T> clazz) {
+        return Optional.ofNullable(beans.get(name))
+                .map(Supplier::get)
+                .map(clazz::cast)
+                .orElse(null);
     }
 
-    public <T> T getBean(String name, Class<T> clazz) {
-       return clazz.cast(beans.get(name).get());
+    public <T> T getBean(Class<T> clazz) {
+        return getBean(clazz.getName(), clazz);
     }
 
     @SafeVarargs

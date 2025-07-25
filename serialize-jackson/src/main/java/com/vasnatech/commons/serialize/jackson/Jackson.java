@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface Jackson {
 
-    TypeReference<Map<String, ?>> TYPE_MAP = new TypeReference<>() {};
+    TypeReference<Map<String, Object>> TYPE_MAP = new TypeReference<>() {};
 
     ObjectMapper getObjectMapper();
 

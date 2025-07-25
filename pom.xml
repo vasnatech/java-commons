@@ -6,13 +6,16 @@
 
     <groupId>com.vasnatech</groupId>
     <artifactId>commons</artifactId>
-    <version>0.4.0</version>
+    <version>0.5.0</version>
     <packaging>pom</packaging>
 
     <modules>
+        <module>argument-parser</module>
+        <module>codec-base64</module>
         <module>collection</module>
         <module>concurrency</module>
         <module>event</module>
+        <module>exception</module>
         <module>expression</module>
         <module>expression-antlr</module>
         <module>expression-default</module>
@@ -23,6 +26,7 @@
         <module>json</module>
         <module>json-jackson</module>
         <module>mapper</module>
+        <module>mime-type</module>
         <module>primitive</module>
         <module>properties</module>
         <module>properties-jackson</module>

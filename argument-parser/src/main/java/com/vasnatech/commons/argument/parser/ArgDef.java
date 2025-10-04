@@ -85,7 +85,7 @@ public class ArgDef<T> implements Comparable<ArgDef<T>> {
     }
 
     public static class Builder<T> {
-        private Class<T> valueType;
+        private final Class<T> valueType;
         private String name;
         private String alias;
         private String usage;

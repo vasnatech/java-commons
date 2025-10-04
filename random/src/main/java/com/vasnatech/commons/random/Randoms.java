@@ -1,6 +1,17 @@
 package com.vasnatech.commons.random;
 
+import org.apache.commons.codec.BinaryEncoder;
+import org.apache.commons.codec.EncoderException;
+import org.apache.commons.codec.binary.Base16;
+import org.apache.commons.codec.binary.Base32;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.BinaryCodec;
+
+import java.lang.reflect.InvocationTargetException;
+import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class Randoms {
@@ -19,19 +30,57 @@ public class Randoms {
     }
 
     public static String hex(int size) {
-        return toHexString(randomBytes(size));
+        return base16(size);
     }
 
-    static final  int HIGH_DIGIT_MASK = 0xF0;
-    static final  int LOW_DIGIT_MASK = 0x0F;
-    static final char[] HEX_DIGITS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
-    static String toHexString(byte[] data) {
-        final int length = data.length;
-        final char[] hexChars = new char[length << 1];
-        for (int index = 0, j = 0; index < length; index++) {
-            hexChars[j++] = HEX_DIGITS[(HIGH_DIGIT_MASK & data[index]) >>> 4];
-            hexChars[j++] = HEX_DIGITS[LOW_DIGIT_MASK & data[index]];
+    static final Map<Integer, Class<? extends BinaryEncoder>> ENCODER_CLASSES = Map.of(
+            2, BinaryCodec.class,
+            16, Base16.class,
+            32, Base32.class,
+            64, Base64.class
+    );
+
+    static final Map<Integer, BinaryEncoder> ENCODERS = new HashMap<>();
+
+    static BinaryEncoder encoder(int base) {
+        if (ENCODERS.containsKey(base)) {
+            return ENCODERS.get(base);
         }
-        return new String(hexChars);
+        Class<? extends BinaryEncoder> binaryEncoderClass = ENCODER_CLASSES.get(base);
+        if (binaryEncoderClass == null) {
+            throw new IllegalArgumentException("Unsupported base: " + base);
+        }
+        BinaryEncoder binaryEncoder = null;
+        try {
+            binaryEncoder = binaryEncoderClass.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException  | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            throw new UnsupportedOperationException("Unable to instantiate " + binaryEncoderClass.getName(), e);
+        }
+        ENCODERS.put(base, binaryEncoder);
+        return binaryEncoder;
+    }
+
+    public static String base2(int size) {
+        return randomString(2, size);
+    }
+
+    public static String base16(int size) {
+        return randomString(16, size);
+    }
+
+    public static String base32(int size) {
+        return randomString(32, size);
+    }
+
+    public static String base64(int size) {
+        return randomString(64, size);
+    }
+
+    private static String randomString(int base, int size) {
+        try {
+            return new String(encoder(base).encode(randomBytes(size)), StandardCharsets.UTF_8);
+        } catch (EncoderException e) {
+            throw new UnsupportedOperationException("Unable to encode base " + base, e);
+        }
     }
 }
